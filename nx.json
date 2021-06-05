@@ -1,8 +1,4 @@
 {
-  "npmScope": "inia",
-  "affected": {
-    "defaultBase": "master"
-  },
   "implicitDependencies": {
     "package.json": {
       "dependencies": "*",
@@ -10,18 +6,30 @@
     },
     ".eslintrc.json": "*"
   },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "npmScope": "inia",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ]
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "rn-test-app": {
+      "tags": []
+    },
+    "inia-server": {
+      "tags": []
+    },
+    "rn-expo-test-app": {
+      "tags": []
+    },
+    "gee-mobile-app": {
+      "tags": []
+    }
+  }
 }
