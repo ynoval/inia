@@ -4,6 +4,6 @@ export class SpecieModel {
   commonNames: string[];
   etymology: string;
   characteristics: string;
-  synonymous: string[];
+  synonyms: string[];
   identificationAspects: string[];
 }

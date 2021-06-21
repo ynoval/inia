@@ -1,3 +1,0 @@
-export const GREENLANDS_COMMUNITIES_COLLECTION_NAME = 'grasslands_communities';
-export const GREENLANDS_COMMUNITIES_SPECIES_COLLECTION_NAME = 'species';
-export const GREENLANDS_COMMUNITIES_SUB_COMMUNITY_COLLECTION_NAME = 'sub_communities';

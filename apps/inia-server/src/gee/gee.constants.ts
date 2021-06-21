@@ -1,14 +1,13 @@
-import * as ee from '@google/earthengine';
-
-export type MapType = 'ET' | 'PPT' | 'PPNA' | 'BH' | 'CPUr' | 'ROU' | 'BHr';
-
+//TODO: Move to project workspace
 export const MAP_PATH = {
   ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
+  // PPT: 'users/bagnato/PronosticoForrajero/GPM16_2001-2020',
   PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020',
-  PPNA: 'users/bagnato/PronosticoForrajero/PPNA2003-2020',
+  T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020',
+  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020',
   BH: 'users/bagnato/PronosticoForrajero/BH2003-2020',
   CPUr:
-    'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/ComunidadesPastizal',
+    'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
   ROU: 'users/bagnato/LimiteOficial-ROU',
 };
 
@@ -24,6 +23,13 @@ export const VISUALIZATION_PARAMS = {
     bands: ['b2020-12-21'],
     max: 40,
     palette: ['ffffff', 'eac107', 'e47200', 'd42e00', 'a52828'],
+  },
+  T: {
+    bands: ['b2020-353'],
+    max: 25.18325027284169,
+    min: 20.892060261680967,
+    opacity: 1,
+    palette: ['0007b3', '5027ff', '9889c7', 'f68893', 'd02e2e', 'b30000'],
   },
   PPNA: {
     opacity: 1,
@@ -62,48 +68,34 @@ export const VISUALIZATION_PARAMS = {
     min: 0,
     max: 60,
   },
+  PrB: {
+    opacity: 1,
+    min: 0,
+    max: 1,
+    palette: ['ffe225'],
+  },
+  Pr: {
+    opacity: 1,
+    min: 0,
+    max: 1,
+    palette: ['6e9916'],
+  },
+  PdB: {
+    opacity: 1,
+    min: 0,
+    max: 1,
+    palette: ['f26d00'],
+  },
+  Pd: {
+    opacity: 1,
+    min: 0,
+    max: 1,
+    palette: ['e8b60e'],
+  },
+  PE: {
+    opacity: 1,
+    min: 0,
+    max: 1,
+    palette: ['724800'],
+  },
 };
-
-export class Maps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mapInfo: any;
-  constructor() {
-    this.mapInfo = {
-      ET: {
-        resource: new ee.Image(MAP_PATH['ET']).divide(3),
-        visualiationParams: VISUALIZATION_PARAMS['ET'],
-      },
-      PPT: {
-        resource: new ee.Image(MAP_PATH['PPT']).select(['b.*']),
-        visualiationParams: VISUALIZATION_PARAMS['PPT'],
-      },
-      PPNA: {
-        resource: new ee.Image(MAP_PATH['PPNA']).select(['b.*']),
-        visualiationParams: VISUALIZATION_PARAMS['PPNA'],
-      },
-      BH: {
-        resource: new ee.Image(MAP_PATH['BH']),
-        visualiationParams: VISUALIZATION_PARAMS['BH'],
-      },
-      CPUr: {
-        resource: new ee.Image(MAP_PATH['CPUr']),
-        visualiationParams: VISUALIZATION_PARAMS['CPUr'],
-      },
-      ROU: {
-        resource: new ee.FeatureCollection(MAP_PATH['ROU']),
-        visualiationParams: VISUALIZATION_PARAMS['ROU'],
-      },
-      BHr: {
-        resource: () => {
-          const PPT = Maps['PPT'].resource;
-          const ET = Maps['ET'].resource;
-          return PPT.subtract(ET);
-        },
-        visualiationParams: VISUALIZATION_PARAMS['BHr'],
-      },
-    };
-  }
-  public getMapInfo(mapTypeId: MapType) {
-    return this.mapInfo[mapTypeId];
-  }
-}

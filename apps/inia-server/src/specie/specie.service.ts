@@ -18,9 +18,7 @@ export class SpecieService {
     try {
       const results = [];
       const speciesRef = await this.fs.db.collection(COLLECTION_NAME).get();
-      console.log(`length: ${speciesRef.docs.length}`);
       speciesRef.docs.forEach((specie) => {
-        console.log(specie.data());
         results.push(this.getSpecie({ ...specie.data(), ['id']: specie.id }));
       });
       return { species: results };
@@ -30,7 +28,6 @@ export class SpecieService {
   }
   async getOne(specieId: string): Promise<SpecieModel> {
     try {
-      console.log(specieId)
       const specieRef = await this.fs.db
         .collection(COLLECTION_NAME)
         .doc(specieId)
@@ -67,10 +64,9 @@ export class SpecieService {
       commonNames: specieInfo.common_names,
       etymology: specieInfo.etymology,
       characteristics: specieInfo.characteristics,
-      synonymous: specieInfo.synonyms,
+      synonyms: specieInfo.synonyms,
       identificationAspects: specieInfo.identification_aspects,
     };
-    console.log(specie);
     return specie;
   }
   //#endregion
