@@ -19,16 +19,7 @@
     }
   },
   "projects": {
-    "rn-test-app": {
-      "tags": []
-    },
     "inia-server": {
-      "tags": []
-    },
-    "rn-expo-test-app": {
-      "tags": []
-    },
-    "gee-mobile-app": {
       "tags": []
     }
   }

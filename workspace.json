@@ -3,7 +3,7 @@
   "cli": {
     "defaultCollection": "@nrwl/nest"
   },
-  "defaultProject": "rn-test-app",
+  "defaultProject": "inia-server",
   "projects": {
     "inia-server": {
       "root": "apps/inia-server",
