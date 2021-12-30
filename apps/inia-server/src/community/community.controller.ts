@@ -33,7 +33,9 @@ export class CommunityController {
   @Get('/findByOrder/:id')
   async getOneByOrder(@Param('id') communityOrder: string) {
     try {
-      const community = await this.communityService.getOneByOrder(communityOrder);
+      const community = await this.communityService.getOneByOrder(
+        communityOrder
+      );
       return { statusCode: HttpStatus.OK, community };
     } catch (e) {
       console.log('ERROR(CommunityController - getOneByOrder: ' + e);

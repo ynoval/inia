@@ -18,9 +18,8 @@
       }
     }
   },
-  "projects": {
-    "inia-server": {
-      "tags": []
-    }
-  }
+  "cli": {
+    "defaultCollection": "@nrwl/nest"
+  },
+  "defaultProject": "inia-server"
 }

@@ -5,7 +5,7 @@ export default () => ({
   firestore: {
     privateKey: fsInfo.private_key,
     clientEmail: fsInfo.client_email,
-    projectId: fsInfo.project_id
+    projectId: fsInfo.project_id,
   },
-  gee: geeInfo
+  gee: geeInfo,
 });

@@ -72,7 +72,7 @@ export class CommunityService {
       throw 'Unable to found any document with this Id: ' + communityOrder;
     } catch (e) {
       console.log('ERROR(CommunityService - getOneByOrder): ' + e);
-      throw(e)
+      throw e;
     }
   }
 
@@ -159,6 +159,7 @@ export class CommunityService {
         link: communityInfo.link,
         description: communityInfo.description,
         order: communityInfo.order,
+        subcommunitiesCounter: communityInfo.subcommunitiesCounter,
       };
     } catch (e) {
       console.log(

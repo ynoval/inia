@@ -1,9 +1,5 @@
 {
   "version": 2,
-  "cli": {
-    "defaultCollection": "@nrwl/nest"
-  },
-  "defaultProject": "inia-server",
   "projects": {
     "inia-server": {
       "root": "apps/inia-server",
@@ -12,16 +8,12 @@
       "targets": {
         "build": {
           "executor": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/inia-server",
             "main": "apps/inia-server/src/main.ts",
             "tsConfig": "apps/inia-server/tsconfig.app.json",
-            "assets": [
-              "apps/inia-server/src/assets"
-            ]
+            "assets": ["apps/inia-server/src/assets"]
           },
           "configurations": {
             "production": {
@@ -46,16 +38,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "apps/inia-server/**/*.ts"
-            ]
+            "lintFilePatterns": ["apps/inia-server/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/inia-server"
-          ],
+          "outputs": ["coverage/apps/inia-server"],
           "options": {
             "jestConfig": "apps/inia-server/jest.config.js",
             "passWithNoTests": true

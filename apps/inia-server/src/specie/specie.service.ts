@@ -4,7 +4,6 @@ import { GoogleCloudStorageProvider } from '../core/gcs.provider';
 import { COLLECTION_NAME } from './specie.constants';
 import { SpecieModel } from './specie.models';
 
-
 @Injectable()
 export class SpecieService {
   // TODO: Move to config file

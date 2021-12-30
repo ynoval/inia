@@ -4,6 +4,7 @@ export class CommunityModel {
   link: string;
   description: string;
   order: string;
+  subcommunitiesCounter: number;
 }
 
 export class CommunitySpecieModel {

@@ -5,6 +5,7 @@ import * as geeInfo from '../config/credentials/gee-key.json';
 
 @Injectable()
 export class GoogleEarthEngineProvider {
+  public ee;
   constructor() {
     ee.data.authenticateViaPrivateKey(
       geeInfo,
@@ -15,6 +16,7 @@ export class GoogleEarthEngineProvider {
           null,
           () => {
             console.log('Earth Engine client library initialized.');
+            this.ee = ee;
           },
           (err) => {
             console.log(err);

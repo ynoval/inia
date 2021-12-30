@@ -8,6 +8,6 @@ import { CommunityModule } from '../community/community.module';
   imports: [CoreModule, CommunityModule],
   providers: [GEEService],
   controllers: [GEEController],
-  exports: [GEEService]
+  exports: [GEEService],
 })
 export class GEEModule {}

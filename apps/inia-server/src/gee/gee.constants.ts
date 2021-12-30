@@ -1,14 +1,20 @@
-//TODO: Move to project workspace
+// TODO: Move to project workspace
 export const MAP_PATH = {
   ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
   // PPT: 'users/bagnato/PronosticoForrajero/GPM16_2001-2020',
   PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020',
   T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020',
-  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020',
+  //  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020', //OLD
+  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020_i',
+  PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2021_doy321',
   BH: 'users/bagnato/PronosticoForrajero/BH2003-2020',
-  CPUr:
-    'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
+  CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
   ROU: 'users/bagnato/LimiteOficial-ROU',
+  PdB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensosBasalto',
+  PrB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalosBasalto',
+  PdE: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDelEste',
+  Pr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalos',
+  Pd: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensos',
 };
 
 export const VISUALIZATION_PARAMS = {
@@ -98,4 +104,9 @@ export const VISUALIZATION_PARAMS = {
     max: 1,
     palette: ['724800'],
   },
+};
+
+export const FILTER_PARAMS = {
+  SCALE: 231.65635826395828,
+  MAX_PIXELS: 1e12,
 };

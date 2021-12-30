@@ -42,7 +42,7 @@ export class MapModel {
 export class Maps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mapInfo: any;
-  constructor(private communityService: CommunityService) {
+  constructor() {
     this.mapInfo = {
       ET: {
         getResource: () => new ee.Image(MAP_PATH['ET']).divide(3),
@@ -64,6 +64,15 @@ export class Maps {
       },
       PPNA: {
         getResource: () => new ee.Image(MAP_PATH['PPNA']).select(['b.*']),
+        getData: () =>
+          new ee.Image(MAP_PATH['PPNA']).select(['b.*']).reduceRegion({
+            reducer: ee.Reducer.mean(),
+            geometry: new ee.Geometry.Point([
+              -55.59084933038717, -33.57749649064163,
+            ]),
+            scale: 231.65635826395828,
+            maxPixels: 1e12,
+          }),
         visualiationParams: VISUALIZATION_PARAMS['PPNA'],
         layerLabel: 'PPNA',
         layerDescription: 'Productividad',
