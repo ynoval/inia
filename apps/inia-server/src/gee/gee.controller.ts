@@ -86,7 +86,7 @@ export class GEEController {
       );
       return { statusCode: HttpStatus.OK, ppnaInformation };
     } catch (e) {
-      console.log(`ERROR(GEEController - getZoneAnualPPNAMean: ${e}`);
+      console.log(`ERROR(GEEController - getZoneAnnualPPNAMean: ${e}`);
       return 'ERROR';
     }
   }
@@ -103,7 +103,7 @@ export class GEEController {
       );
       return { statusCode: HttpStatus.OK, ppnaInformation };
     } catch (e) {
-      console.log(`ERROR(GEEController - getZoneAnualPPNA: ${e}`);
+      console.log(`ERROR(GEEController - getZoneAnnualPPNA: ${e}`);
       return 'ERROR';
     }
   }

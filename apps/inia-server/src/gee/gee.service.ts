@@ -195,7 +195,10 @@ export class GEEService {
         return ee.Geometry.Polygon(coordinates);
       }
       case 'rectangle': {
-        return ee.Geometry.Polygon(coordinates);
+        return ee.Geometry.Rectangle([
+          [coordinates[3], coordinates[2]],
+          [coordinates[5], coordinates[0]],
+        ]);
       }
     }
   }
@@ -251,17 +254,38 @@ export class GEEService {
     const yearValues = await yearData.getInfo();
     const yearResult = this.getPPNAMonthly(yearValues);
 
-    const nextYearData = await this.getZonePPNAData(zone, year + 1, applyMask);
-    const nextYearValues = await nextYearData.getInfo();
-    const nextYearResult = this.getPPNAMonthly(nextYearValues);
+    let nextYearResult = [];
+    if (
+      year !== dayjs().year() - 1 ||
+      dayjs().month() !== 0 ||
+      dayjs().day() > 20
+    ) {
+      const nextYearData = await this.getZonePPNAData(
+        zone,
+        year + 1,
+        applyMask
+      );
+      const nextYearValues = await nextYearData.getInfo();
+      nextYearResult = this.getPPNAMonthly(nextYearValues);
+    }
 
+    //add Predictions
+    if (year === dayjs().year() - 1) {
+      const predictionValues = this.getZonePrediction(zone);
+      const currentMonth = dayjs().month();
+      for (let i = 0; i <= 2; i++) {
+        nextYearResult.push(predictionValues[currentMonth + i]);
+      }
+    }
     return this.getPPNAProductiveValues(yearResult, nextYearResult);
   }
 
   private getZonePPNAData(zone, year, applyMask = false) {
     const geometry = !applyMask ? zone : zone.geometry(500);
-    const mapPath =
-      year === dayjs().year() ? MAP_PATH.PPNA_CURRENT_YEAR : MAP_PATH.PPNA;
+    // const mapPath =
+    //   year === dayjs().year() ? MAP_PATH.PPNA_CURRENT_YEAR : MAP_PATH.PPNA;
+    const mapPath = MAP_PATH.PPNA;
+
     let ppna = ee.Image(mapPath).select([`b${year}.*`]);
     if (applyMask) {
       ppna.unmask();
@@ -327,18 +351,24 @@ export class GEEService {
   }
 
   private async getCurrentYearPPNA(zone, applyMask = false) {
-    const currentYearData = await this.getZonePPNAData(
-      zone,
-      dayjs().year(),
-      applyMask
-    );
-    const currentYearValues = await currentYearData.getInfo();
-    const currentYearResult = this.getPPNAMonthly(currentYearValues);
+    const currentMonth = dayjs().month();
+    const currentDay = dayjs().day();
     const nextYearResult = [];
+    let currentYearResult = [];
+
+    if (currentMonth > 0 || currentDay > 20) {
+      const currentYearData = await this.getZonePPNAData(
+        zone,
+        dayjs().year(),
+        applyMask
+      );
+      const currentYearValues = await currentYearData.getInfo();
+      currentYearResult = this.getPPNAMonthly(currentYearValues);
+    }
 
     // Add prediction  values (3 months)
     const predictionValues = this.getZonePrediction(zone);
-    const currentMonth = dayjs().month();
+
     for (let i = 0; i <= 2; i++) {
       if (currentMonth + i <= 11) {
         currentYearResult.push(predictionValues[currentMonth + i]);
@@ -401,7 +431,7 @@ export class GEEService {
   private async getHistoricalPPNA(zone, applyMask = false) {
     const geometry = !applyMask ? zone : zone.geometry(500);
     let ppna = ee.Image(
-      'projects/gee-inia/assets/PPNA-16_PromedioHistoricoPorAnno'
+      'projects/gee-inia/assets/PPNA-16_PromedioHistoricoPorAnno_new'
     );
     if (applyMask) {
       ppna.unmask();

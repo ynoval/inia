@@ -4,9 +4,10 @@ export const MAP_PATH = {
   // PPT: 'users/bagnato/PronosticoForrajero/GPM16_2001-2020',
   PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020',
   T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020',
-  //  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020', //OLD
-  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020_i',
-  PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2021_doy321',
+  //  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020_1', //OLD
+  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica',
+  PPNA_HISTORIC: 'users/bagnato/PronosticoForrajero/PPNA-16_PromedioHistorico',
+  //PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2022_doy1',
   BH: 'users/bagnato/PronosticoForrajero/BH2003-2020',
   CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
   ROU: 'users/bagnato/LimiteOficial-ROU',
