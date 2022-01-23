@@ -9,12 +9,18 @@ export const MAP_PATH = {
   PPNA_HISTORIC: 'users/bagnato/PronosticoForrajero/PPNA-16_PromedioHistorico',
   //PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2022_doy1',
   BH: 'users/bagnato/PronosticoForrajero/BH2003-2020',
-  CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
+  // CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
+  CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
   ROU: 'users/bagnato/LimiteOficial-ROU',
+  //C-III
   PdB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensosBasalto',
+  // C-I
   PrB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalosBasalto',
+  // C-VI
   PdE: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDelEste',
+  // C-II
   Pr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalos',
+  // C-IV
   Pd: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensos',
 };
 

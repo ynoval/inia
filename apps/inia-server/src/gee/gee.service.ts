@@ -179,6 +179,7 @@ export class GEEService {
         return {
           order: community.order,
           id: community.id,
+          name: community.name,
         };
       })
       .catch((e) => {
@@ -223,7 +224,9 @@ export class GEEService {
       });
     const areas = await areasInfo.getInfo();
     const promises = [];
+
     areas.groups.forEach(async (info) => {
+      console.log({ info });
       const communityOrder = this.getCommunityOrder(info.group);
       promises.push(this.getCommunityInfo(communityOrder));
     });
@@ -252,6 +255,7 @@ export class GEEService {
 
     const yearData = await this.getZonePPNAData(zone, year, applyMask);
     const yearValues = await yearData.getInfo();
+    console.log({ yearValues });
     const yearResult = this.getPPNAMonthly(yearValues);
 
     let nextYearResult = [];
@@ -270,13 +274,13 @@ export class GEEService {
     }
 
     //add Predictions
-    if (year === dayjs().year() - 1) {
-      const predictionValues = this.getZonePrediction(zone);
-      const currentMonth = dayjs().month();
-      for (let i = 0; i <= 2; i++) {
-        nextYearResult.push(predictionValues[currentMonth + i]);
-      }
-    }
+    // if (year === dayjs().year() - 1) {
+    //   const predictionValues = this.getZonePrediction(zone);
+    //   const currentMonth = dayjs().month();
+    //   for (let i = 0; i <= 2; i++) {
+    //     nextYearResult.push(predictionValues[currentMonth + i]);
+    //   }
+    // }
     return this.getPPNAProductiveValues(yearResult, nextYearResult);
   }
 
@@ -299,11 +303,9 @@ export class GEEService {
     });
   }
 
-  private getPPNAMonthly(data) {
-    const result = [];
-    let lastMonth = 0;
-    let sumValue = 0;
-    let amountValue = 0;
+  getPPNAMonthly(data) {
+    console.log({ data });
+    const results = [];
     const sortData = Object.entries(data).sort((a, b) => {
       const aKey = a[0].split('-')[1];
       const bKey = b[0].split('-')[1];
@@ -311,42 +313,58 @@ export class GEEService {
     });
     for (const [key, value] of sortData) {
       const [, day] = key.split('-');
-      const month = dayjs('2021-01-01')
-        .add(+day - 1, 'day')
-        .month();
-      if (month === lastMonth) {
-        amountValue++;
-        sumValue += +value;
-      } else {
-        result.push({
-          month: lastMonth,
-          ppna: +(sumValue / amountValue).toFixed(2),
-        });
-        amountValue = 1;
-        sumValue = +value;
-      }
-      lastMonth = month;
+      results.push({
+        // day: dayjs('2021-01-01')
+        //   .add(+day - 1, 'day')
+        //   .format('MMM DD'),
+        day: +day,
+        ppna: (+value).toFixed(2),
+      });
     }
-    result.push({
-      month: lastMonth,
-      ppna: +(sumValue / amountValue).toFixed(2),
-    });
-    return result.sort((a, b) => {
-      return +a.month < +b.month ? -1 : 1;
-    });
+    console.log({ results });
+    return results;
   }
 
+  // private getPPNAMonthly(data) {
+  //   const result = [];
+  //   let lastMonth = 0;
+  //   let sumValue = 0;
+  //   let amountValue = 0;
+  //   const sortData = Object.entries(data).sort((a, b) => {
+  //     const aKey = a[0].split('-')[1];
+  //     const bKey = b[0].split('-')[1];
+  //     return +aKey < +bKey ? -1 : 1;
+  //   });
+  //   for (const [key, value] of sortData) {
+  //     const [, day] = key.split('-');
+  //     const month = dayjs('2021-01-01')
+  //       .add(+day - 1, 'day')
+  //       .month();
+  //     if (month === lastMonth) {
+  //       amountValue++;
+  //       sumValue += +value;
+  //     } else {
+  //       result.push({
+  //         month: lastMonth,
+  //         ppna: +(sumValue / amountValue).toFixed(2),
+  //       });
+  //       amountValue = 1;
+  //       sumValue = +value;
+  //     }
+  //     lastMonth = month;
+  //   }
+  //   result.push({
+  //     month: lastMonth,
+  //     ppna: +(sumValue / amountValue).toFixed(2),
+  //   });
+  //   return result.sort((a, b) => {
+  //     return +a.month < +b.month ? -1 : 1;
+  //   });
+  // }
+
   private getPPNAProductiveValues(yearResult, nextYearResult) {
-    const result = [];
-    // Move over all months
-    for (let i = 0; i <= 11; i++) {
-      //add values July - December from yearResults
-      if (i < 6) {
-        result.push(yearResult[i + 6]);
-      } else {
-        result.push(nextYearResult[i - 6]);
-      }
-    }
+    console.log({ yearResult }, { nextYearResult });
+    const result = [...yearResult.slice(12), ...nextYearResult.slice(0, 12)];
     return result;
   }
 
@@ -367,35 +385,35 @@ export class GEEService {
     }
 
     // Add prediction  values (3 months)
-    const predictionValues = this.getZonePrediction(zone);
+    // const predictionValues = this.getZonePrediction(zone);
 
-    for (let i = 0; i <= 2; i++) {
-      if (currentMonth + i <= 11) {
-        currentYearResult.push(predictionValues[currentMonth + i]);
-      } else {
-        nextYearResult.push(predictionValues[currentMonth + i - 12]);
-      }
-    }
+    // for (let i = 0; i <= 2; i++) {
+    //   if (currentMonth + i <= 11) {
+    //     currentYearResult.push(predictionValues[currentMonth + i]);
+    //   } else {
+    //     nextYearResult.push(predictionValues[currentMonth + i - 12]);
+    //   }
+    // }
     return this.getPPNAProductiveValues(currentYearResult, nextYearResult);
   }
 
   // TODO: IMPLEMENT!!
-  private getZonePrediction(zone) {
-    return [
-      { month: 0, ppna: 403.11 },
-      { month: 1, ppna: 349.5 },
-      { month: 2, ppna: 301.5 },
-      { month: 3, ppna: 265.5 },
-      { month: 4, ppna: 233.5 },
-      { month: 5, ppna: 205.5 },
-      { month: 6, ppna: 163.76 },
-      { month: 7, ppna: 232.65 },
-      { month: 8, ppna: 345.86 },
-      { month: 9, ppna: 354.68 },
-      { month: 10, ppna: 318.39 },
-      { month: 11, ppna: 356.5 },
-    ];
-  }
+  // private getZonePrediction(zone) {
+  //   return [
+  //     { month: 0, ppna: 403.11 },
+  //     { month: 1, ppna: 349.5 },
+  //     { month: 2, ppna: 301.5 },
+  //     { month: 3, ppna: 265.5 },
+  //     { month: 4, ppna: 233.5 },
+  //     { month: 5, ppna: 205.5 },
+  //     { month: 6, ppna: 163.76 },
+  //     { month: 7, ppna: 232.65 },
+  //     { month: 8, ppna: 345.86 },
+  //     { month: 9, ppna: 354.68 },
+  //     { month: 10, ppna: 318.39 },
+  //     { month: 11, ppna: 356.5 },
+  //   ];
+  // }
 
   private async getAnnualPPNAMean(zone, applyMask = false) {
     const geometry = !applyMask ? zone : zone.geometry(500);
@@ -422,10 +440,11 @@ export class GEEService {
       renamedValues[newKey] = value;
     }
     const result = this.getPPNAMonthly(renamedValues);
+    return [...result.slice(12), ...result.slice(0, 12)];
     //Sort Mean in productive order (July - June)
-    return result.sort((a, b) =>
-      (+a.month + 6) % 12 < (+b.month + 6) % 12 ? -1 : 1
-    );
+    // return result.sort((a, b) =>
+    //   (+a.day + 6) % 12 < (+b.month + 6) % 12 ? -1 : 1
+    // );
   }
 
   private async getHistoricalPPNA(zone, applyMask = false) {
@@ -475,11 +494,11 @@ export class GEEService {
         break;
       }
       case 'IV': {
-        path = MAP_PATH['PE'];
+        path = MAP_PATH['Pd'];
         break;
       }
-      case 'V': {
-        path = MAP_PATH['Pd'];
+      case 'VI': {
+        path = MAP_PATH['PdE'];
         break;
       }
     }
@@ -489,15 +508,15 @@ export class GEEService {
   private getCommunityOrder(id: number) {
     switch (id) {
       case 1:
-        return 'I';
+        return 'VI';
       case 2:
-        return 'II';
-      case 3:
         return 'III';
-      case 4:
+      case 3:
         return 'IV';
+      case 4:
+        return 'I';
       case 5:
-        return 'V';
+        return 'II';
     }
   }
   //#endregion

@@ -151,9 +151,9 @@ export class Maps {
           return CPUr.eq(1).selfMask();
         },
         visualiationParams: VISUALIZATION_PARAMS['PE'],
-        layerLabel: 'COMUNIDAD V',
+        layerLabel: 'COMUNIDAD VI',
         layerDescription: 'Pastizales del Este',
-        communityOrder: 'V',
+        communityOrder: 'VI',
       },
     };
   }

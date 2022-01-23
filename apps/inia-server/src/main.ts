@@ -6,6 +6,7 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as bodyParser from 'body-parser';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
@@ -17,6 +18,9 @@ async function bootstrap() {
     allowedHeaders: '*',
     origin: '*',
   });
+
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
   const config = new DocumentBuilder()
     .setTitle('Pastizales ROU')
