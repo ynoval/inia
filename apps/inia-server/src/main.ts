@@ -27,7 +27,7 @@ async function bootstrap() {
     .setDescription(
       'API público que permite acceder a los datos generados en Google Earth Engine sobre la productividad de los pastizales del Uruguay así como a la información relacionada con las comunidades de pastizales y las especies que en ellas habitan.'
     )
-    .setVersion('1.0')
+    .setVersion('1.1')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-doc', app, document);

@@ -4,5 +4,6 @@
     "titleBar.activeBackground": "#6D2160",
     "titleBar.activeForeground": "#FDF8FC"
   },
-  "editor.guides.bracketPairs": "active"
+  "editor.guides.bracketPairs": "active",
+  "cSpell.words": ["endregion"]
 }

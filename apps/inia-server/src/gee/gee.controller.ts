@@ -63,7 +63,7 @@ export class GEEController {
   @Post('/zone/information')
   // @ApiResponse({
   //   status: 200,
-  //   description: 'Retreive Zone information like (Area, Area per communities)',
+  //   description: 'Retrieve Zone information like (Area, Area per communities)',
   // })
   async getZoneInformation(
     @Body() zoneInfo: ZoneInfo

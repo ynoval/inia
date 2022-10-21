@@ -262,7 +262,7 @@ export class GEEService {
     if (
       year !== dayjs().year() - 1 ||
       dayjs().month() !== 0 ||
-      dayjs().day() > 20
+      dayjs().date() > 20
     ) {
       const nextYearData = await this.getZonePPNAData(
         zone,
@@ -270,6 +270,7 @@ export class GEEService {
         applyMask
       );
       const nextYearValues = await nextYearData.getInfo();
+      console.log({ nextYearValues });
       nextYearResult = this.getPPNAMonthly(nextYearValues);
     }
 
@@ -370,7 +371,7 @@ export class GEEService {
 
   private async getCurrentYearPPNA(zone, applyMask = false) {
     const currentMonth = dayjs().month();
-    const currentDay = dayjs().day();
+    const currentDay = dayjs().date();
     const nextYearResult = [];
     let currentYearResult = [];
 
@@ -380,6 +381,7 @@ export class GEEService {
         dayjs().year(),
         applyMask
       );
+      console;
       const currentYearValues = await currentYearData.getInfo();
       currentYearResult = this.getPPNAMonthly(currentYearValues);
     }
