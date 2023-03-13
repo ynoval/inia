@@ -17,6 +17,18 @@ export class GEEService {
     return this.getMapInfo(mapType);
   }
 
+  async getPoliceSectionals() {
+    const mapInfo = new Maps().getMapInfo('SP');
+    const fc = await mapInfo.getResource().getInfo();
+    return fc.features;
+  }
+
+  async getBasins(grade: 'I' | 'II' | 'III' | 'IV' | 'V') {
+    const mapInfo = new Maps().getMapInfo(`C_${grade}`);
+    const fc = await mapInfo.getResource().getInfo();
+    return fc.features;
+  }
+
   /**
    * Return all information layers
    * PPNA, PPT, T, CPUr, ROU
@@ -26,12 +38,18 @@ export class GEEService {
       const promises = [
         this.getMapInfo('ROU'),
         this.getMapInfo('CPUr'),
-        this.getMapInfo('PPNA'),
         this.getMapInfo('PPT'),
         this.getMapInfo('T'),
+        this.getMapInfo('PPNA'),
+        // this.getMapInfo('SP'),
+        // this.getMapInfo('C_I'),
+        // this.getMapInfo('C_II'),
+        // this.getMapInfo('C_III'),
+        // this.getMapInfo('C_IV'),
+        // this.getMapInfo('C_V'),
         // this.getMapInfo('BH'),
-        // this.getMapInfo('ET'),
-        // this.getMapInfo('BHr'),
+        this.getMapInfo('ET'),
+        this.getMapInfo('RH'),
       ];
       return await Promise.all(promises);
     } catch (e) {
@@ -90,6 +108,7 @@ export class GEEService {
     }
   }
 
+  // #region PPNA - Community
   async getCommunityPPNAInformation(communityOrder) {
     try {
       const community = await this.createCommunityImage(communityOrder);
@@ -108,26 +127,6 @@ export class GEEService {
     } catch (e) {
       console.log('EEE', e);
     }
-  }
-
-  async getZoneAnnualPPNA(zoneInfo, year) {
-    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
-    return {
-      year: year,
-      values: await this.getZonePPNAByYear(zone, year),
-    };
-  }
-
-  async getZoneAnnualPPNAMean(zoneInfo) {
-    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
-    return {
-      values: await this.getAnnualPPNAMean(zone),
-    };
-  }
-
-  async getZoneHistoricalPPNA(zoneInfo) {
-    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
-    return this.getHistoricalPPNA(zone);
   }
 
   async getCommunityAnnualPPNA(communityOrder, year) {
@@ -150,13 +149,384 @@ export class GEEService {
     return this.getHistoricalPPNA(community, true);
   }
 
+  // #endregion PPNA - Community
+
+  // #region PPNA
+  async getZoneAnnualPPNA(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      year: year,
+      values: await this.getZonePPNAByYear(zone, year),
+    };
+  }
+
+  async getZoneAnnualPPNAMean(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      values: await this.getAnnualPPNAMean(zone),
+    };
+  }
+
+  async getZoneHistoricalPPNA(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalPPNA(zone);
+  }
+
+  // #endregion PPNA
+
+  // #region APAR
+  async getZoneAnnualAPAR(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      year: year,
+      values: await this.getZoneAPARByYear(zone, year),
+    };
+  }
+
+  async getZoneAnnualAPARMean(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      values: await this.getAnnualAPARMean(zone),
+    };
+  }
+
+  async getZoneHistoricalAPAR(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalAPAR(zone);
+  }
+
+  // #endregion APAR
+
+  // #region ET
+  async getZoneAnnualET(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      year: year,
+      values: await this.getZoneETByYear(zone, year),
+    };
+  }
+
+  async getZoneAnnualETMean(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      values: await this.getAnnualETMean(zone),
+    };
+  }
+
+  async getZoneHistoricalET(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalET(zone);
+  }
+  // #endregion ET
+
+  // #region RH
+  async getZoneAnnualRH(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      year: year,
+      values: await this.getZoneRHByYear(zone, year),
+    };
+  }
+
+  async getZoneAnnualRHMean(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      values: await this.getAnnualRHMean(zone),
+    };
+  }
+
+  async getZoneHistoricalRH(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalRH(zone);
+  }
+  // #endregion RH
+
+  // #region RHProp
+  async getZoneAnnualRHProp(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      year: year,
+      values: await this.getZoneRHPropByYear(zone, year),
+    };
+  }
+
+  async getZoneAnnualRHPropMean(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return {
+      values: await this.getAnnualRHPropMean(zone),
+    };
+  }
+
+  async getZoneHistoricalRHProp(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalRHProp(zone);
+  }
+  // #endregion RHProp
+
+  // #region IOSE
+  async getZoneHistoricalIOSE(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalIOSE(zone);
+  }
+  // #endregion IOSE
+
+  // #region UPDATE
+
+  /* Check if there are some updates available
+   * Read mark file to get last update and last historical year processed
+   * for every indicator check appropriate data to check updates
+   *   - ppna: Get MODIS data and check last feature date
+   * Return an object with all indicator
+   *   ppna: {
+   *     isUpdateAvailable: true // or false
+   *     year: 2022 // year to be processed
+   *   }
+   */
+  isUpdateAvailable() {
+    // Read update mark file
+    // Get MODIS Data
+    // Check if last feature is the same of the last update
+  }
+
+  /*
+   * Update PPNA
+   * Create a new asset with historical ppna and the ppna for the year that receive as a parameter
+   * 1- Define the region (ROU)
+   * 2- Get MODIS Data for the year that receive as a parameter
+   * 3- Define fPar
+   * 4- Define Par
+   * 5- Get Historical Data and append calculated ppna bands
+   * 6- Export new Asset and return the new asset id and the taskId
+   * */
+  updatePPNA(year: number) {
+    // Define the region
+    // TODO: Move to config
+    const ROU = ee.FeatureCollection(
+      'projects/pastizalesrou/assets/general/limite_oficial_rou_km2'
+    );
+
+    // #region NDVI - fPAR
+    const EVI = ee
+      .ImageCollection('MODIS/061/MOD13Q1')
+      .filterDate(`${year}-01-01`, `${year}-12-31`)
+      .select(['EVI', 'DetailedQA']);
+
+    const eviSize = EVI.size().getInfo();
+
+    // #region Filtro de Calidad
+
+    //Funcion del filtro de calidad
+    const MaskCalidad = function (x) {
+      const Q = x.select(['DetailedQA']);
+      const sombra = Q.bitwiseAnd(ee.Image.constant(32768)); // genera una mascara con 0 y 32768
+      const nube = Q.bitwiseAnd(ee.Image.constant(1024)); //genera una mascara con 0 y 1024
+      const aerosol = Q.bitwiseAnd(ee.Image.constant(192)).eq(192); // Filtra solo HIGH, genera una mascara con 0, 64, 128 y 192. Y enmascara con valor 1 a todos los que no son 192 (aerosol:High)
+      const filtro = sombra.add(nube).add(aerosol); // suma todas las mascaras
+      return filtro.lt(1); //genera la mascara final con los pixeles que pasaron el filtro
+    };
+
+    //Aplica filtro de calidad a la serie de EVI
+    const EVIfilt = EVI.map(function (img) {
+      const mask = MaskCalidad(img);
+      const EVI = img.select(['EVI']);
+      const masked = EVI.updateMask(mask);
+      return masked.copyProperties(img, [
+        'system:index',
+        'system:time_start',
+        'system:time_end',
+      ]);
+    });
+
+    //#endregion
+
+    const fPAR16 = ee.ImageCollection(
+      EVIfilt.map(function (img) {
+        let fPAR = img.multiply(0.000115).subtract(0.0174); //0.00115 por pendiente 1.15 y SF 0.0001
+        fPAR = fPAR.where(fPAR.lt(0), 0);
+        fPAR = fPAR.where(fPAR.gt(0.95), 0.95);
+        return fPAR.copyProperties(img, [
+          'system:index',
+          'system:time_end',
+          'system:time_start',
+        ]);
+      })
+    );
+
+    // #endregion
+
+    // #region PAR
+
+    // HAY QUE GENERAR UN MECANISMO DE FILTRO TEMPORAL PARA QUE LA SERIE DE PAR SEA DE IGUAL TAMAÑO
+    // QUE LA SERIE DE fPAR, YO LO ESTABA HACIENDO DEFINIENDO EL DIA JULIANO EN LA LISTA f16 A MANO
+    // PODRIA SER CON EVI.size() y multiplicar ese valor por 16 o algo así...
+
+    const GLDAS = ee
+      .ImageCollection('NASA/GLDAS/V021/NOAH/G025/T3H')
+      .select(['SWdown_f_tavg'])
+      .filterDate('2020-01-01', '2020-12-31'); //W/m2
+    //.filterDate(startYear+'-01-01', endYear+'-12-31');//W/m2
+
+    const years = ee.List.sequence(2020, 2020, 1);
+
+    const f16 = ee.List.sequence(1, eviSize * 16, 16);
+
+    const PAR16 = ee.ImageCollection.fromImages(
+      years
+        .map(function (y) {
+          return f16.map(function (j) {
+            const w = GLDAS.filter(ee.Filter.calendarRange(y, y, 'year'))
+              .filter(
+                ee.Filter.calendarRange(j, ee.Number(j).add(15), 'day_of_year')
+              )
+              .mean()
+              .multiply(0.6912); //scale factor
+            return w.set('anio', y).set('dia', j);
+            //.set('system:time_start', ee.Date.fromYMD(y, m, 1).millis());
+          });
+        })
+        .flatten()
+    );
+
+    // #endregion PAR
+
+    // ---- PPNA
+    const f16sbt = ee.List.sequence(1, eviSize * 16, 16);
+
+    const PPNA = ee.ImageCollection.fromImages(
+      years
+        .map(function (y) {
+          return f16sbt.map(function (j) {
+            const PAR = ee.Image(
+              PAR16.filterMetadata('anio', 'equals', y)
+                .filterMetadata('dia', 'equals', j)
+                .first()
+            );
+            const fPAR = ee.Image(
+              fPAR16
+                .filter(ee.Filter.calendarRange(year, year, 'year'))
+                .filter(
+                  ee.Filter.calendarRange(j, ee.Number(j).add(1), 'day_of_year')
+                )
+                .first()
+            );
+            const PPNAgMS = ee.Image(
+              fPAR
+                .multiply(PAR)
+                .multiply(0.4227)
+                .subtract(0.1978)
+                .rename('PPNA')
+            );
+            return PPNAgMS.multiply(10).copyProperties(PAR); //multiply(10) para pasar de gMS/m2.16d a KgMS/Ha.16d
+          });
+        })
+        .flatten()
+    );
+
+    //------------Extraccion
+
+    //Transformar la imageCollection en Image (imagen multibanda)
+    const empty = ee.Image().select();
+    let multiband = PPNA.iterate(function (image, result) {
+      return ee.Image(result).addBands(
+        image.rename([
+          ee
+            .String('b')
+            .cat(ee.String(year.toString()))
+            .cat('-')
+            .cat(ee.String(ee.Number(image.get('dia')).int())),
+        ])
+      );
+    }, empty);
+
+    multiband = ee.Image(multiband);
+
+    // ESTO ES PARA AGREGAR LAS BANDAS DE LAT Y LONG, SE PODRÍA SACAR
+    const PPNA_Multiband = multiband; //.addBands(ee.Image.pixelLonLat())
+
+    //IMPORT SERIE HISTORICA y compilación con imagen actual
+    // ver el tema de las bandas de LAT y LONG
+
+    const PPNAh = ee.Image(MAP_PATH['PPNA_HISTORIC']).select(['b.*']);
+
+    const PPNAh_act = PPNAh.addBands(PPNA_Multiband);
+
+    //EXPORT serie Historica + ultima imagen de PPNA
+    // programar el nombre del asset que se exporta con por ejemplo _1, _2 ... _23
+    // ver el tema de sobreescribir la serie Historica
+
+    ROU.geometry().evaluate((geometry) => {
+      const g = ee.Geometry(geometry);
+      const region = JSON.stringify(g.toGeoJSON());
+      const task = ee.batch.Export.image.toAsset({
+        image: PPNAh_act.clip(ROU),
+        description: 'PPNA-16_TEMP',
+        assetId: 'projects/gee-inia/assets/PPNA-16_TEMP',
+        region: region,
+        scale: 231.65635826395828,
+        maxPixels: 1e12,
+      });
+
+      task.start(
+        function () {
+          console.log(`Started task #${task.id}`);
+          const info = ee.data.listOperations();
+          console.log(JSON.stringify(info));
+        },
+        function (error) {
+          console.log(`Error: ${error}`);
+        }
+      );
+    });
+  }
+
+  /*
+   * Replace PPNA asset for the asset specified in the parameters
+   * Replace PPNA History if it is necessary
+   * Update Mark storage file
+   * Parameters: {
+   *   newPPNAAssetId
+   *   requireUpdateHistoryPPNA
+   *   year
+   *   lastUpdate
+   * }
+   */
+  afterUpdatePPNA() {
+    // Move Asset
+  }
+
+  updateET() {
+    try {
+      const EVI = ee
+        .ImageCollection('MODIS/061/MOD13Q1')
+        .filterDate('2022-01-01', '2022-12-31')
+        .select(['EVI', 'DetailedQA']);
+
+      EVI.evaluate((result: any) => {
+        const lastFeature = result.features[result.features.length - 1];
+        console.log('lastFeature', lastFeature.id);
+      });
+
+      console.log('FIN');
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  checkTasks() {
+    const info = ee.data.listOperations();
+    console.log(JSON.stringify(info));
+  }
+  // #endregion
+
   //#region Private Methods
   private async getMapInfo(mapType: MapType): Promise<MapModel> {
     const mapInfo = new Maps().getMapInfo(mapType);
-    const communityInfo = await this.getCommunityInfo(mapInfo.communityOrder);
+    const communityInfo = mapInfo.communityOrder
+      ? await this.getCommunityInfo(mapInfo.communityOrder)
+      : undefined;
     return new Promise((resolve, reject) => {
       try {
-        mapInfo.getResource().getMap(mapInfo.visualiationParams, (result) => {
+        mapInfo.getResource().getMap(mapInfo.visualizationParams, (result) => {
           return resolve({
             mapType: mapType,
             mapId: result.mapid,
@@ -226,7 +596,6 @@ export class GEEService {
     const promises = [];
 
     areas.groups.forEach(async (info) => {
-      console.log({ info });
       const communityOrder = this.getCommunityOrder(info.group);
       promises.push(this.getCommunityInfo(communityOrder));
     });
@@ -242,36 +611,42 @@ export class GEEService {
     return data.getInfo();
   }
 
+  // #region PPNA
   private async getZonePPNAByYear(zone, year, applyMask = false) {
     if (year <= 2000) {
       return [];
     }
-    if (year > dayjs().year()) {
+    const currentYear = dayjs().year();
+    if (year > currentYear) {
       return [];
     }
-    if (year === dayjs().year()) {
-      return this.getCurrentYearPPNA(zone, applyMask);
+    if (year === currentYear) {
+      return this.getCurrentYear(zone, MAP_PATH.PPNA, `b${year}.*`, applyMask);
     }
 
-    const yearData = await this.getZonePPNAData(zone, year, applyMask);
+    const yearData = await this.getZoneData(
+      zone,
+      MAP_PATH.PPNA,
+      `b${year}.*`,
+      applyMask
+    );
     const yearValues = await yearData.getInfo();
-    console.log({ yearValues });
-    const yearResult = this.getPPNAMonthly(yearValues);
+    const yearResult = this.getMonthly(yearValues, 'ppna');
 
     let nextYearResult = [];
     if (
-      year !== dayjs().year() - 1 ||
+      year !== currentYear - 1 ||
       dayjs().month() !== 0 ||
       dayjs().date() > 20
     ) {
-      const nextYearData = await this.getZonePPNAData(
+      const nextYearData = await this.getZoneData(
         zone,
-        year + 1,
+        MAP_PATH.PPNA,
+        `b${year + 1}.*`,
         applyMask
       );
       const nextYearValues = await nextYearData.getInfo();
-      console.log({ nextYearValues });
-      nextYearResult = this.getPPNAMonthly(nextYearValues);
+      nextYearResult = this.getMonthly(nextYearValues, 'ppna');
     }
 
     //add Predictions
@@ -282,146 +657,12 @@ export class GEEService {
     //     nextYearResult.push(predictionValues[currentMonth + i]);
     //   }
     // }
-    return this.getPPNAProductiveValues(yearResult, nextYearResult);
+    return this.getProductiveValues(yearResult, nextYearResult);
   }
-
-  private getZonePPNAData(zone, year, applyMask = false) {
-    const geometry = !applyMask ? zone : zone.geometry(500);
-    // const mapPath =
-    //   year === dayjs().year() ? MAP_PATH.PPNA_CURRENT_YEAR : MAP_PATH.PPNA;
-    const mapPath = MAP_PATH.PPNA;
-
-    let ppna = ee.Image(mapPath).select([`b${year}.*`]);
-    if (applyMask) {
-      ppna.unmask();
-      ppna = ppna.updateMask(zone);
-    }
-    return ppna.reduceRegion({
-      reducer: ee.Reducer.mean(),
-      geometry: geometry,
-      scale: FILTER_PARAMS.SCALE,
-      maxPixels: FILTER_PARAMS.MAX_PIXELS,
-    });
-  }
-
-  getPPNAMonthly(data) {
-    console.log({ data });
-    const results = [];
-    const sortData = Object.entries(data).sort((a, b) => {
-      const aKey = a[0].split('-')[1];
-      const bKey = b[0].split('-')[1];
-      return +aKey < +bKey ? -1 : 1;
-    });
-    for (const [key, value] of sortData) {
-      const [, day] = key.split('-');
-      results.push({
-        // day: dayjs('2021-01-01')
-        //   .add(+day - 1, 'day')
-        //   .format('MMM DD'),
-        day: +day,
-        ppna: (+value).toFixed(2),
-      });
-    }
-    console.log({ results });
-    return results;
-  }
-
-  // private getPPNAMonthly(data) {
-  //   const result = [];
-  //   let lastMonth = 0;
-  //   let sumValue = 0;
-  //   let amountValue = 0;
-  //   const sortData = Object.entries(data).sort((a, b) => {
-  //     const aKey = a[0].split('-')[1];
-  //     const bKey = b[0].split('-')[1];
-  //     return +aKey < +bKey ? -1 : 1;
-  //   });
-  //   for (const [key, value] of sortData) {
-  //     const [, day] = key.split('-');
-  //     const month = dayjs('2021-01-01')
-  //       .add(+day - 1, 'day')
-  //       .month();
-  //     if (month === lastMonth) {
-  //       amountValue++;
-  //       sumValue += +value;
-  //     } else {
-  //       result.push({
-  //         month: lastMonth,
-  //         ppna: +(sumValue / amountValue).toFixed(2),
-  //       });
-  //       amountValue = 1;
-  //       sumValue = +value;
-  //     }
-  //     lastMonth = month;
-  //   }
-  //   result.push({
-  //     month: lastMonth,
-  //     ppna: +(sumValue / amountValue).toFixed(2),
-  //   });
-  //   return result.sort((a, b) => {
-  //     return +a.month < +b.month ? -1 : 1;
-  //   });
-  // }
-
-  private getPPNAProductiveValues(yearResult, nextYearResult) {
-    console.log({ yearResult }, { nextYearResult });
-    const result = [...yearResult.slice(12), ...nextYearResult.slice(0, 12)];
-    return result;
-  }
-
-  private async getCurrentYearPPNA(zone, applyMask = false) {
-    const currentMonth = dayjs().month();
-    const currentDay = dayjs().date();
-    const nextYearResult = [];
-    let currentYearResult = [];
-
-    if (currentMonth > 0 || currentDay > 20) {
-      const currentYearData = await this.getZonePPNAData(
-        zone,
-        dayjs().year(),
-        applyMask
-      );
-      console;
-      const currentYearValues = await currentYearData.getInfo();
-      currentYearResult = this.getPPNAMonthly(currentYearValues);
-    }
-
-    // Add prediction  values (3 months)
-    // const predictionValues = this.getZonePrediction(zone);
-
-    // for (let i = 0; i <= 2; i++) {
-    //   if (currentMonth + i <= 11) {
-    //     currentYearResult.push(predictionValues[currentMonth + i]);
-    //   } else {
-    //     nextYearResult.push(predictionValues[currentMonth + i - 12]);
-    //   }
-    // }
-    return this.getPPNAProductiveValues(currentYearResult, nextYearResult);
-  }
-
-  // TODO: IMPLEMENT!!
-  // private getZonePrediction(zone) {
-  //   return [
-  //     { month: 0, ppna: 403.11 },
-  //     { month: 1, ppna: 349.5 },
-  //     { month: 2, ppna: 301.5 },
-  //     { month: 3, ppna: 265.5 },
-  //     { month: 4, ppna: 233.5 },
-  //     { month: 5, ppna: 205.5 },
-  //     { month: 6, ppna: 163.76 },
-  //     { month: 7, ppna: 232.65 },
-  //     { month: 8, ppna: 345.86 },
-  //     { month: 9, ppna: 354.68 },
-  //     { month: 10, ppna: 318.39 },
-  //     { month: 11, ppna: 356.5 },
-  //   ];
-  // }
 
   private async getAnnualPPNAMean(zone, applyMask = false) {
     const geometry = !applyMask ? zone : zone.geometry(500);
-    let ppna = ee
-      .Image('users/bagnato/PronosticoForrajero/PPNA-16_PromedioHistorico') // TODO: RENAME and MOVE TO GCP APP FOLDER
-      .select(['b.*']);
+    let ppna = ee.Image(MAP_PATH['PPNA_HISTORIC_AVERAGE']).select(['b.*']);
 
     if (applyMask) {
       ppna.unmask();
@@ -441,19 +682,13 @@ export class GEEService {
       const newKey = `b-${day}`;
       renamedValues[newKey] = value;
     }
-    const result = this.getPPNAMonthly(renamedValues);
+    const result = this.getMonthly(renamedValues, 'ppna');
     return [...result.slice(12), ...result.slice(0, 12)];
-    //Sort Mean in productive order (July - June)
-    // return result.sort((a, b) =>
-    //   (+a.day + 6) % 12 < (+b.month + 6) % 12 ? -1 : 1
-    // );
   }
 
   private async getHistoricalPPNA(zone, applyMask = false) {
     const geometry = !applyMask ? zone : zone.geometry(500);
-    let ppna = ee.Image(
-      'projects/gee-inia/assets/PPNA-16_PromedioHistoricoPorAnno_new'
-    );
+    let ppna = ee.Image(MAP_PATH['PPNA_HISTORIC_AVERAGE_BY_YEAR']);
     if (applyMask) {
       ppna.unmask();
       ppna = ppna.updateMask(zone);
@@ -478,6 +713,554 @@ export class GEEService {
       return +a.year < +b.year ? -1 : 1;
     });
   }
+  //#endregion PPNA
+
+  // #region APAR
+  private async getZoneAPARByYear(zone, year, applyMask = false) {
+    if (year <= 2000) {
+      return [];
+    }
+    const currentYear = dayjs().year();
+    if (year > currentYear) {
+      return [];
+    }
+    if (year === currentYear) {
+      return this.getCurrentYear(zone, MAP_PATH.APAR, `b${year}.*`, applyMask);
+    }
+
+    const yearData = await this.getZoneData(
+      zone,
+      MAP_PATH.APAR,
+      `b${year}.*`,
+      applyMask
+    );
+    const yearValues = await yearData.getInfo();
+    const yearResult = this.getMonthly(yearValues, 'apar');
+
+    let nextYearResult = [];
+    if (
+      year !== currentYear - 1 ||
+      dayjs().month() !== 0 ||
+      dayjs().date() > 20
+    ) {
+      const nextYearData = await this.getZoneData(
+        zone,
+        MAP_PATH.APAR,
+        `b${year + 1}.*`,
+        applyMask
+      );
+      const nextYearValues = await nextYearData.getInfo();
+      nextYearResult = this.getMonthly(nextYearValues, 'apar');
+    }
+    return this.getProductiveValues(yearResult, nextYearResult);
+  }
+
+  private async getAnnualAPARMean(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let apar = ee.Image(MAP_PATH['APAR_HISTORIC_AVERAGE']).select(['b.*']);
+
+    if (applyMask) {
+      apar.unmask();
+      apar = apar.updateMask(zone);
+    }
+    const data = apar.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    //Rename Bands (eg: b1 --> b-1)
+    const renamedValues: any = {};
+    for (const [key, value] of Object.entries(values)) {
+      const [, day] = key.split('b');
+      const newKey = `b-${day}`;
+      renamedValues[newKey] = value;
+    }
+    const result = this.getMonthly(renamedValues, 'apar');
+    return [...result.slice(12), ...result.slice(0, 12)];
+  }
+
+  private async getHistoricalAPAR(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let apar = ee.Image(MAP_PATH['APAR_HISTORIC_AVERAGE_BY_YEAR']);
+    if (applyMask) {
+      apar.unmask();
+      apar = apar.updateMask(zone);
+    }
+
+    const data = apar.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    const result = [];
+    for (const [key, value] of Object.entries(values)) {
+      const [, year] = key.split('b');
+      result.push({
+        year: year,
+        apar: (value as number).toFixed(2),
+      });
+    }
+    return result.sort((a, b) => {
+      return +a.year < +b.year ? -1 : 1;
+    });
+  }
+  //#endregion APAR
+
+  //#region ET
+  private async getZoneETByYear(zone, year, applyMask = false) {
+    // TODO: Move to config (First year ET data --> 2001)
+    if (year <= 2000) {
+      return [];
+    }
+    const currentYear = dayjs().year();
+
+    if (year > currentYear) {
+      return [];
+    }
+
+    const bandsName = `b${year}.*`;
+
+    if (year === currentYear) {
+      return this.getCurrentYear(zone, MAP_PATH.ET, bandsName, applyMask);
+    }
+
+    const yearData = await this.getZoneData(
+      zone,
+      MAP_PATH.ET,
+      bandsName,
+      applyMask
+    );
+    const yearValues = await yearData.getInfo();
+    const yearResult = this.getMonthly(yearValues, 'et');
+
+    let nextYearResult = [];
+    // if (
+    //   year !== currentYear - 1 ||
+    //   dayjs().month() !== 0 ||
+    //   dayjs().date() > 20
+    // ) {
+    try {
+      const nextYearData = await this.getZoneData(
+        zone,
+        MAP_PATH.ET,
+        `b${year + 1}.*`,
+        applyMask
+      );
+      const nextYearValues = await nextYearData.getInfo();
+      nextYearResult = this.getMonthly(nextYearValues, 'et');
+    } catch (e) {
+      console.log('getZoneETByYear error', e);
+      nextYearResult = [];
+    }
+
+    //add Predictions
+    // if (year === dayjs().year() - 1) {
+    //   const predictionValues = this.getZonePrediction(zone);
+    //   const currentMonth = dayjs().month();
+    //   for (let i = 0; i <= 2; i++) {
+    //     nextYearResult.push(predictionValues[currentMonth + i]);
+    //   }
+    // }
+    return this.getProductiveValues(yearResult, nextYearResult, 8);
+  }
+
+  private async getAnnualETMean(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let image = ee.Image(MAP_PATH['ET_HISTORIC_AVERAGE']).select(['b.*']);
+
+    if (applyMask) {
+      image.unmask();
+      image = image.updateMask(zone);
+    }
+    const data = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    //Rename Bands (eg: b1 --> b-1)
+    const renamedValues: any = {};
+    for (const [key, value] of Object.entries(values)) {
+      const [, day] = key.split('b');
+      const newKey = `b-${day}`;
+      renamedValues[newKey] = value;
+    }
+    const result = this.getMonthly(renamedValues, 'et');
+    return [...result.slice(12), ...result.slice(0, 12)];
+  }
+
+  private async getHistoricalET(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let image = ee.Image(MAP_PATH['ET_HISTORIC_AVERAGE_BY_YEAR']);
+    if (applyMask) {
+      image.unmask();
+      image = image.updateMask(zone);
+    }
+
+    const data = image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    const result = [];
+    for (const [key, value] of Object.entries(values)) {
+      const [, year] = key.split('b');
+      result.push({
+        year: year,
+        et: (value as number).toFixed(2),
+      });
+    }
+    return result.sort((a, b) => {
+      return +a.year < +b.year ? -1 : 1;
+    });
+  }
+
+  // #endregion ET
+
+  // #region RH
+  private async getZoneRHByYear(zone, year, applyMask = false) {
+    if (year < 2003) {
+      return [];
+    }
+    const currentYear = dayjs().year();
+    if (year > currentYear) {
+      return [];
+    }
+    if (year === currentYear) {
+      return this.getCurrentYear(zone, MAP_PATH.RH, `b${year}.*`, applyMask);
+    }
+
+    const yearData = await this.getZoneData(
+      zone,
+      MAP_PATH.RH,
+      `b${year}.*`,
+      applyMask
+    );
+    const yearValues = await yearData.getInfo();
+    const yearResult = this.getMonthly(yearValues, 'rh');
+
+    let nextYearResult = [];
+    if (
+      year !== currentYear - 1 ||
+      dayjs().month() !== 0 ||
+      dayjs().date() > 20
+    ) {
+      try {
+        const nextYearData = await this.getZoneData(
+          zone,
+          MAP_PATH.RH,
+          `b${year + 1}.*`,
+          applyMask
+        );
+        const nextYearValues = await nextYearData.getInfo();
+        nextYearResult = this.getMonthly(nextYearValues, 'rh');
+      } catch {
+        console.log(`Error getZoneRHByYear -> getZoneData ${year + 1}`);
+        nextYearResult = [];
+      }
+    }
+
+    //add Predictions
+    // if (year === dayjs().year() - 1) {
+    //   const predictionValues = this.getZonePrediction(zone);
+    //   const currentMonth = dayjs().month();
+    //   for (let i = 0; i <= 2; i++) {
+    //     nextYearResult.push(predictionValues[currentMonth + i]);
+    //   }
+    // }
+
+    return this.getProductiveValues(yearResult, nextYearResult);
+  }
+
+  private async getAnnualRHMean(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let rh = ee.Image(MAP_PATH['RH_HISTORIC_AVERAGE']).select(['b.*']);
+
+    if (applyMask) {
+      rh.unmask();
+      rh = rh.updateMask(zone);
+    }
+    const data = rh.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    //Rename Bands (eg: b1 --> b-1)
+    const renamedValues: any = {};
+    for (const [key, value] of Object.entries(values)) {
+      const [, day] = key.split('b');
+      const newKey = `b-${day}`;
+      renamedValues[newKey] = value;
+    }
+    const result = this.getMonthly(renamedValues, 'rh');
+    return [...result.slice(12), ...result.slice(0, 12)];
+  }
+
+  private async getHistoricalRH(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let rh = ee.Image(MAP_PATH['RH_HISTORIC_AVERAGE_BY_YEAR']);
+    if (applyMask) {
+      rh.unmask();
+      rh = rh.updateMask(zone);
+    }
+
+    const data = rh.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    const result = [];
+    for (const [key, value] of Object.entries(values)) {
+      const [, year] = key.split('b');
+      result.push({
+        year: year,
+        rh: (value as number).toFixed(2),
+      });
+    }
+    return result.sort((a, b) => {
+      return +a.year < +b.year ? -1 : 1;
+    });
+  }
+  // #endregion RH
+
+  // #region RHProp
+  private async getZoneRHPropByYear(zone, year, applyMask = false) {
+    if (year < 2003) {
+      return [];
+    }
+    const currentYear = dayjs().year();
+    if (year > currentYear) {
+      return [];
+    }
+    if (year === currentYear) {
+      return this.getCurrentYear(
+        zone,
+        MAP_PATH.RHProp,
+        `b${year}.*`,
+        applyMask
+      );
+    }
+
+    const yearData = await this.getZoneData(
+      zone,
+      MAP_PATH.RHProp,
+      `b${year}.*`,
+      applyMask
+    );
+    const yearValues = await yearData.getInfo();
+    const yearResult = this.getMonthly(yearValues, 'rhProp');
+
+    let nextYearResult = [];
+    if (
+      year !== currentYear - 1 ||
+      dayjs().month() !== 0 ||
+      dayjs().date() > 20
+    ) {
+      const nextYearData = await this.getZoneData(
+        zone,
+        MAP_PATH.RHProp,
+        `b${year + 1}.*`,
+        applyMask
+      );
+      const nextYearValues = await nextYearData.getInfo();
+      nextYearResult = this.getMonthly(nextYearValues, 'rhProp');
+    }
+
+    //add Predictions
+    // if (year === dayjs().year() - 1) {
+    //   const predictionValues = this.getZonePrediction(zone);
+    //   const currentMonth = dayjs().month();
+    //   for (let i = 0; i <= 2; i++) {
+    //     nextYearResult.push(predictionValues[currentMonth + i]);
+    //   }
+    // }
+    return this.getProductiveValues(yearResult, nextYearResult);
+  }
+
+  private async getAnnualRHPropMean(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let rhProp = ee.Image(MAP_PATH['RHProp_HISTORIC_AVERAGE']).select(['b.*']);
+
+    if (applyMask) {
+      rhProp.unmask();
+      rhProp = rhProp.updateMask(zone);
+    }
+    const data = rhProp.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    //Rename Bands (eg: b1 --> b-1)
+    const renamedValues: any = {};
+    for (const [key, value] of Object.entries(values)) {
+      const [, day] = key.split('b');
+      const newKey = `b-${day}`;
+      renamedValues[newKey] = value;
+    }
+    const result = this.getMonthly(renamedValues, 'rhProp');
+    return [...result.slice(12), ...result.slice(0, 12)];
+  }
+
+  private async getHistoricalRHProp(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let rhProp = ee.Image(MAP_PATH['RHProp_HISTORIC_AVERAGE_BY_YEAR']);
+    if (applyMask) {
+      rhProp.unmask();
+      rhProp = rhProp.updateMask(zone);
+    }
+
+    const data = rhProp.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const values = await data.getInfo();
+    const result = [];
+    for (const [key, value] of Object.entries(values)) {
+      const [, year] = key.split('b');
+      result.push({
+        year: year,
+        rhProp: (value as number).toFixed(2),
+      });
+    }
+    return result.sort((a, b) => {
+      return +a.year < +b.year ? -1 : 1;
+    });
+  }
+  // #endregion RHProp
+
+  // #region IOSE
+  private async getHistoricalIOSE(zone, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let iose = ee.Image(MAP_PATH['IOSE']);
+    if (applyMask) {
+      iose.unmask();
+      iose = iose.updateMask(zone);
+    }
+
+    const data = iose.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const dataMin = iose.reduceRegion({
+      reducer: ee.Reducer.min(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const dataMax = iose.reduceRegion({
+      reducer: ee.Reducer.max(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const dataMedian = iose.reduceRegion({
+      reducer: ee.Reducer.median(),
+      geometry: geometry,
+      scale: 231.65635826395828,
+      maxPixels: 1e12,
+    });
+    const test = await iose.getInfo();
+    const values = await data.getInfo();
+    const valuesMin = await dataMin.getInfo();
+    const valuesMax = await dataMax.getInfo();
+    const valuesMedian = await dataMedian.getInfo();
+    console.log({ test });
+    console.log({ values });
+    console.log({ valuesMin });
+    console.log({ valuesMax });
+    console.log({ valuesMedian });
+    const result = [];
+    for (const [key, value] of Object.entries(values)) {
+      const [, year] = key.split('b');
+      result.push({
+        year: year,
+        iose: (value as number).toFixed(2),
+      });
+    }
+    return result.sort((a, b) => {
+      return +a.year < +b.year ? -1 : 1;
+    });
+  }
+  // #endregion IOSE
+  // #region General (Used for all indicators)
+  private async getCurrentYear(zone, mapPath, bandsName, applyMask = false) {
+    const currentMonth = dayjs().month();
+    const currentDay = dayjs().date();
+    const nextYearResult = [];
+    let currentYearResult = [];
+
+    if (currentMonth > 0 || currentDay > 20) {
+      const currentYearData = await this.getZoneData(
+        zone,
+        mapPath,
+        bandsName,
+        applyMask
+      );
+      const currentYearValues = await currentYearData.getInfo();
+      currentYearResult = this.getMonthly(currentYearValues, 'et');
+    }
+
+    return this.getProductiveValues(currentYearResult, nextYearResult);
+  }
+
+  private getZoneData(zone, mapPath, bandsName, applyMask = false) {
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    let image = ee.Image(mapPath).select([bandsName]);
+    if (applyMask) {
+      image.unmask();
+      image = image.updateMask(zone);
+    }
+    return image.reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: geometry,
+      scale: FILTER_PARAMS.SCALE,
+      maxPixels: FILTER_PARAMS.MAX_PIXELS,
+    });
+  }
+
+  private getMonthly(data, valueName: string) {
+    const results = [];
+    const sortData = Object.entries(data).sort((a, b) => {
+      const aKey = a[0].split('-')[1];
+      const bKey = b[0].split('-')[1];
+      return +aKey < +bKey ? -1 : 1;
+    });
+    for (const [key, value] of sortData) {
+      const [, day] = key.split('-');
+      const result = {};
+      result['day'] = +day;
+      result[valueName] = (+value).toFixed(2);
+      results.push(result);
+    }
+    return results;
+  }
+
+  // Get last 11(23) dates of the year and 12(23) dates of the next year
+  private getProductiveValues(yearResult, nextYearResult, days = 16) {
+    const middle = Math.ceil(365 / (days * 2));
+    const yearValues = yearResult.slice(middle);
+    const nextYearValues = nextYearResult.slice(0, middle);
+    return [...yearValues, ...nextYearValues];
+  }
+
+  // #endRegion General (used for all indicators)
 
   private async createCommunityImage(communityOrder: string) {
     let path = '';
@@ -522,4 +1305,85 @@ export class GEEService {
     }
   }
   //#endregion
+
+  //#endregion Private Methods
+
+  // #region DELETE
+  /* DELETE - OLD Methods
+ // private getZonePPNAData(zone, year, applyMask = false) {
+  //   const geometry = !applyMask ? zone : zone.geometry(500);
+  //   const mapPath = MAP_PATH.PPNA;
+
+  //   let ppna = ee.Image(mapPath).select([`b${year}.*`]);
+  //   if (applyMask) {
+  //     ppna.unmask();
+  //     ppna = ppna.updateMask(zone);
+  //   }
+  //   return ppna.reduceRegion({
+  //     reducer: ee.Reducer.mean(),
+  //     geometry: geometry,
+  //     scale: FILTER_PARAMS.SCALE,
+  //     maxPixels: FILTER_PARAMS.MAX_PIXELS,
+  //   });
+  // }
+
+  // private getPPNAMonthly(data) {
+  //   console.log({ data });
+  //   const results = [];
+  //   const sortData = Object.entries(data).sort((a, b) => {
+  //     const aKey = a[0].split('-')[1];
+  //     const bKey = b[0].split('-')[1];
+  //     return +aKey < +bKey ? -1 : 1;
+  //   });
+  //   for (const [key, value] of sortData) {
+  //     const [, day] = key.split('-');
+  //     results.push({
+  //       // day: dayjs('2021-01-01')
+  //       //   .add(+day - 1, 'day')
+  //       //   .format('MMM DD'),
+  //       day: +day,
+  //       ppna: (+value).toFixed(2),
+  //     });
+  //   }
+  //   console.log({ results });
+  //   return results;
+  // }
+
+  // private getPPNAProductiveValues(yearResult, nextYearResult) {
+  //   console.log({ yearResult }, { nextYearResult });
+  //   const result = [...yearResult.slice(12), ...nextYearResult.slice(0, 12)];
+  //   return result;
+  // }
+
+  // private async getCurrentYearPPNA(zone, applyMask = false) {
+  //   const currentMonth = dayjs().month();
+  //   const currentDay = dayjs().date();
+  //   const nextYearResult = [];
+  //   let currentYearResult = [];
+
+  //   if (currentMonth > 0 || currentDay > 20) {
+  //     const currentYearData = await this.getZonePPNAData(
+  //       zone,
+  //       dayjs().year(),
+  //       applyMask
+  //     );
+  //     console;
+  //     const currentYearValues = await currentYearData.getInfo();
+  //     currentYearResult = this.getPPNAMonthly(currentYearValues);
+  //   }
+
+  //   // Add prediction  values (3 months)
+  //   // const predictionValues = this.getZonePrediction(zone);
+
+  //   // for (let i = 0; i <= 2; i++) {
+  //   //   if (currentMonth + i <= 11) {
+  //   //     currentYearResult.push(predictionValues[currentMonth + i]);
+  //   //   } else {
+  //   //     nextYearResult.push(predictionValues[currentMonth + i - 12]);
+  //   //   }
+  //   // }
+  //   return this.getPPNAProductiveValues(currentYearResult, nextYearResult);
+  // }
+  */
+  // #endregion
 }

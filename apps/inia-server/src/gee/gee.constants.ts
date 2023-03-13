@@ -1,36 +1,84 @@
 // TODO: Move to project workspace
 export const MAP_PATH = {
-  ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
+  APAR: 'projects/pastizalesrou/assets/apar/apar-16',
+  APAR_HISTORIC: 'projects/pastizalesrou/assets/apar/apar-16_Historica', // TODO: FIX
+  APAR_HISTORIC_AVERAGE:
+    'projects/pastizalesrou/assets/apar/apar-16_PromedioHistorico', // TODO: FIX
+  APAR_HISTORIC_AVERAGE_BY_YEAR:
+    'projects/pastizalesrou/assets/apar/apar_PromedioAnual', // TODO: FIX
+  PPNA: 'projects/pastizalesrou/assets/ppna/ppna-16',
+  PPNA_HISTORIC: 'projects/pastizalesrou/assets/ppna/ppna-16_Historica',
+  PPNA_HISTORIC_AVERAGE:
+    'projects/pastizalesrou/assets/ppna/ppna-16_PromedioHistorico',
+  PPNA_HISTORIC_AVERAGE_BY_YEAR:
+    'projects/pastizalesrou/assets/ppna/ppna_PromedioAnual',
+
+  ET: 'projects/pastizalesrou/assets/et/et-8',
+  ET_HISTORIC: 'projects/pastizalesrou/assets/et/et-8_Historica',
+  ET_HISTORIC_AVERAGE:
+    'projects/pastizalesrou/assets/et/et-8_PromedioHistorico',
+  ET_HISTORIC_AVERAGE_BY_YEAR:
+    'projects/pastizalesrou/assets/et/et_PromedioAnual',
+
+  PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020', // TODO: FIX and MOVE
+  T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020', // TODO: FIX and MOVE
+  RH: 'projects/pastizalesrou/assets/rh/rh-16_Historica', // TODO: FIX remove Historica prefix when current year data is available
+  RH_HISTORIC: 'projects/pastizalesrou/assets/rh/rh-16_Historica',
+  RH_HISTORIC_AVERAGE:
+    'projects/pastizalesrou/assets/rh/rh-16_PromedioHistorico',
+  RH_HISTORIC_AVERAGE_BY_YEAR:
+    'projects/pastizalesrou/assets/rh/rh_PromedioAnual',
+  RHProp: 'projects/pastizalesrou/assets/rhProp/rhProp-16_Historica',
+  RHProp_HISTORIC: 'projects/pastizalesrou/assets/rhProp/rhProp-16_Historica',
+  RHProp_HISTORIC_AVERAGE:
+    'projects/pastizalesrou/assets/rhProp/rhProp-16_PromedioHistorico',
+  RHProp_HISTORIC_AVERAGE_BY_YEAR:
+    'projects/pastizalesrou/assets/rhProp/rhProp_PromedioAnual',
+
+  IOSE: 'projects/pastizalesrou/assets/iose/iose_Historica',
+  CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
+  ROU: 'users/bagnato/LimiteOficial-ROU',
+
+  // Comunidades de pastizales
+  // C-I
+  PrB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalosBasalto', // TODO: Move and Rename
+  // C-II
+  Pr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalos', // Move and Rename
+  //C-III
+  PdB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensosBasalto', // TODO: Move and Rename
+  // C-IV
+  Pd: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensos', // TODO: Move and Rename
+  // C-VI (No a really community)
+  PdE: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDelEste', // TODO: Move and Rename
+
+  //Seccionales policiales
+  SP: 'projects/gee-inia/assets/Seccionales_Policiales',
+
+  // Cuencas
+  C_I: 'users/fgallego/Cuencas/Cuencas_G1_utm21S', // TODO: Move and rename
+  C_II: 'users/fgallego/Cuencas/Cuencas_G2_utm21S', // TODO: Move and rename
+  C_III: 'users/fgallego/Cuencas/Cuencas_G3_utm21S', // TODO: Move and rename
+  C_IV: 'users/fgallego/Cuencas/Cuencas_G4_utm21S', // TODO: Move and rename
+  C_V: 'users/fgallego/Cuencas/Cuencas_G5_utm21S', // TODO: Move and rename
+
+  //OLD
+  // ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
   // PPT: 'users/bagnato/PronosticoForrajero/GPM16_2001-2020',
-  PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020',
-  T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020',
   //  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020_1', //OLD
   // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica',
   // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d16',
   // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d113',
-  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d257',
-  PPNA_HISTORIC: 'users/bagnato/PronosticoForrajero/PPNA-16_PromedioHistorico',
+  // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d257',
   //PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2022_doy1',
-  BH: 'users/bagnato/PronosticoForrajero/BH2003-2020',
   // CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
-  CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
-  ROU: 'users/bagnato/LimiteOficial-ROU',
-  //C-III
-  PdB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensosBasalto',
-  // C-I
-  PrB: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalosBasalto',
-  // C-VI
-  PdE: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDelEste',
-  // C-II
-  Pr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesRalos',
-  // C-IV
-  Pd: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDensos',
+  // CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
+  // ROU: 'users/bagnato/LimiteOficial-ROU',
 };
 
 export const VISUALIZATION_PARAMS = {
   ET: {
     opacity: 1,
-    bands: ['b2020-12-d3'],
+    bands: ['b2023-33'],
     max: 80,
     palette: ['ffffff', '9dfcf7', '3387ff', '0256bd', '0a0561', '000000'],
   },
@@ -47,9 +95,15 @@ export const VISUALIZATION_PARAMS = {
     opacity: 1,
     palette: ['0007b3', '5027ff', '9889c7', 'f68893', 'd02e2e', 'b30000'],
   },
+  APAR: {
+    opacity: 1,
+    bands: ['b2023-3'],
+    max: 600,
+    palette: ['86622e', 'dc7d0b', 'f8d911', 'd2ff11', '709426', '38841e'],
+  },
   PPNA: {
     opacity: 1,
-    bands: ['b2020-353'],
+    bands: ['b2023-33'],
     max: 600,
     palette: ['86622e', 'dc7d0b', 'f8d911', 'd2ff11', '709426', '38841e'],
   },
@@ -67,6 +121,26 @@ export const VISUALIZATION_PARAMS = {
       '4861ff',
       '00069b',
     ],
+  },
+  RH: {
+    opacity: 1,
+    bands: ['b2022-353'],
+    min: -200,
+    max: 150,
+    palette: [
+      'a70000',
+      'e21818',
+      'ff8479',
+      'ffffff',
+      '6bbdff',
+      '4861ff',
+      '00069b',
+    ],
+  },
+  IOSE: {
+    min: 0,
+    max: 1,
+    bands: ['b2021'], // Jul 2021 -- Jun 2022
   },
   CPUr: {
     opacity: 1,
@@ -113,6 +187,36 @@ export const VISUALIZATION_PARAMS = {
     min: 0,
     max: 1,
     palette: ['724800'],
+  },
+  SP: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  C_I: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  C_II: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  C_III: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  C_IV: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  C_V: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
   },
 };
 
