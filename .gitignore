@@ -104,3 +104,5 @@ npm-debug.*
 *.orig.*
 web-build/
 apps/rn-expo-test-app/node_modules
+.node-xmlhttprequest-sync-70057
+.node-xmlhttprequest-sync-60102
