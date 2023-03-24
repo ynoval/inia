@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
-import { applicationDefault } from 'firebase-admin/app';
 import { CommunityModel } from '../community/community.models';
 import { MapType } from './gee.models';
 import { GEEService } from './gee.service';
@@ -130,12 +129,13 @@ export class GEEController {
   async getZoneHistoricalPPNA(@Body() zoneInfo: ZoneInfo) {
     try {
       console.log('Executing getZoneHistoricalPPNA...');
-      const historicalPPNAInformation =
-        await this.geeService.getZoneHistoricalPPNA(zoneInfo);
+      const ppnaInformation = await this.geeService.getZoneHistoricalPPNA(
+        zoneInfo
+      );
       console.log('getZoneHistoricalPPNA results: ', {
-        historicalPPNAInformation: JSON.stringify(historicalPPNAInformation),
+        ppnaInformation: JSON.stringify(ppnaInformation),
       });
-      return { statusCode: HttpStatus.OK, historicalPPNAInformation };
+      return { statusCode: HttpStatus.OK, ppnaInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalPPNA: ${e}`);
       return 'ERROR';
@@ -186,12 +186,13 @@ export class GEEController {
   async getZoneHistoricalAPAR(@Body() zoneInfo: ZoneInfo) {
     try {
       console.log('Executing getZoneHistoricalAPAR...');
-      const historicalAPARInformation =
-        await this.geeService.getZoneHistoricalAPAR(zoneInfo);
+      const aparInformation = await this.geeService.getZoneHistoricalAPAR(
+        zoneInfo
+      );
       console.log('getZoneHistoricalAPAR results: ', {
-        historicalAPARInformation: JSON.stringify(historicalAPARInformation),
+        aparInformation: JSON.stringify(aparInformation),
       });
-      return { statusCode: HttpStatus.OK, historicalAPARInformation };
+      return { statusCode: HttpStatus.OK, aparInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalAPAR: ${e}`);
       return 'ERROR';
@@ -240,14 +241,12 @@ export class GEEController {
   @Post('/zone/et/historical')
   async getZoneHistoricalET(@Body() zoneInfo: ZoneInfo) {
     try {
-      console.log('Executing getZoneHistoricalET');
-      const historicalETInformation = await this.geeService.getZoneHistoricalET(
-        zoneInfo
-      );
+      console.log('Executing getZoneHistoricalET...');
+      const etInformation = await this.geeService.getZoneHistoricalET(zoneInfo);
       console.log('getZoneHistoricalET results: ', {
-        historicalETInformation: JSON.stringify(historicalETInformation),
+        etInformation: JSON.stringify(etInformation),
       });
-      return { statusCode: HttpStatus.OK, historicalETInformation };
+      return { statusCode: HttpStatus.OK, etInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalET: ${e}`);
       return 'ERROR';
@@ -262,7 +261,9 @@ export class GEEController {
     try {
       console.log('Executing getZoneAnnualRHMean...');
       const rhInformation = await this.geeService.getZoneAnnualRHMean(zoneInfo);
-      console.log('getZoneAnnulRHMean result: ', { rhInformation });
+      console.log('getZoneAnnulRHMean results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
 
       return { statusCode: HttpStatus.OK, rhInformation };
     } catch (e) {
@@ -282,7 +283,9 @@ export class GEEController {
         zoneInfo,
         +year
       );
-      console.log('getZoneAnnualRH results: ', { rhInformation });
+      console.log('getZoneAnnualRH results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
       return { statusCode: HttpStatus.OK, rhInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneAnnualRH: ${e}`);
@@ -294,11 +297,11 @@ export class GEEController {
   async getZoneHistoricalRH(@Body() zoneInfo: ZoneInfo) {
     try {
       console.log('Executing getZoneHistoricalRH...');
-      const historicalRHInformation = await this.geeService.getZoneHistoricalRH(
-        zoneInfo
-      );
-      console.log('getZoneHistoricalRH results: ', { historicalRHInformation });
-      return { statusCode: HttpStatus.OK, historicalRHInformation };
+      const rhInformation = await this.geeService.getZoneHistoricalRH(zoneInfo);
+      console.log('getZoneHistoricalRH results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
+      return { statusCode: HttpStatus.OK, rhInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalRH: ${e}`);
       return 'ERROR';
@@ -306,7 +309,7 @@ export class GEEController {
   }
   // #endregion RH
 
-  // #region RH
+  // #region RHProp
   @Post('/zone/rhProp/annual/mean')
   async getZoneAnnualRHPropMean(@Body() zoneInfo: ZoneInfo) {
     try {
@@ -314,8 +317,9 @@ export class GEEController {
       const rhPropInformation = await this.geeService.getZoneAnnualRHPropMean(
         zoneInfo
       );
-      console.log('getZoneAnnulRHPropMean result: ', { rhPropInformation });
-
+      console.log('getZoneAnnulRHPropMean result: ', {
+        rhPropInformation: JSON.stringify(rhPropInformation),
+      });
       return { statusCode: HttpStatus.OK, rhPropInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneAnnualRHPropMean: ${e}`);
@@ -334,7 +338,9 @@ export class GEEController {
         zoneInfo,
         +year
       );
-      console.log('getZoneAnnualRHProp results: ', { rhPropInformation });
+      console.log('getZoneAnnualRHProp results: ', {
+        rhPropInformation: JSON.stringify(rhPropInformation),
+      });
       return { statusCode: HttpStatus.OK, rhPropInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneAnnualRHProp: ${e}`);
@@ -346,12 +352,13 @@ export class GEEController {
   async getZoneHistoricalRHProp(@Body() zoneInfo: ZoneInfo) {
     try {
       console.log('Executing getZoneHistoricalRHProp...');
-      const historicalRHPropInformation =
-        await this.geeService.getZoneHistoricalRHProp(zoneInfo);
+      const rhPropInformation = await this.geeService.getZoneHistoricalRHProp(
+        zoneInfo
+      );
       console.log('getZoneHistoricalRHProp results: ', {
-        historicalRHPropInformation,
+        rhPropInformation: JSON.stringify(rhPropInformation),
       });
-      return { statusCode: HttpStatus.OK, historicalRHPropInformation };
+      return { statusCode: HttpStatus.OK, rhPropInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalRHProp: ${e}`);
       return 'ERROR';
@@ -364,12 +371,13 @@ export class GEEController {
   async getZoneHistoricalIOSE(@Body() zoneInfo: ZoneInfo) {
     try {
       console.log('Executing getZoneHistoricalIOSE...');
-      const historicalIOSEInformation =
-        await this.geeService.getZoneHistoricalIOSE(zoneInfo);
+      const ioseInformation = await this.geeService.getZoneHistoricalIOSE(
+        zoneInfo
+      );
       console.log('getZoneHistoricalIOSE results: ', {
-        historicalIOSEInformation: JSON.stringify(historicalIOSEInformation),
+        ioseInformation: JSON.stringify(ioseInformation),
       });
-      return { statusCode: HttpStatus.OK, historicalIOSEInformation };
+      return { statusCode: HttpStatus.OK, ioseInformation };
     } catch (e) {
       console.log(`ERROR(GEEController - getZoneHistoricalIOSE: ${e}`);
       return 'ERROR';
@@ -380,29 +388,20 @@ export class GEEController {
   // #endregion
 
   // #region COMMUNITY
-  @Get('/community/:order/ppna')
-  async getCommunityPPNAInformation(@Param('order') communityOrder: string) {
-    try {
-      const communityPPNAInformation =
-        await this.geeService.getCommunityPPNAInformation(communityOrder);
-      return {
-        statusCode: HttpStatus.OK,
-        communityPPNAInformation,
-      };
-    } catch (e) {
-      console.log(`ERROR(GEEController - getCommunityPPNAInformation: ${e}`);
-      return 'ERROR';
-    }
-  }
-
+  // #region PPNA
   @Get('/community/:order/ppna/annual/mean')
   async getCommunityAnnualPPNAMean(@Param('order') communityOrder: string) {
     try {
-      const communityAnnualPPNAMean =
-        await this.geeService.getCommunityAnnualPPNAMean(communityOrder);
+      console.log('Executing getCommunityAnnualPPNAMean...');
+      const ppnaInformation = await this.geeService.getCommunityAnnualPPNAMean(
+        communityOrder
+      );
+      console.log('getCommunityAnnualPPNAMean results: ', {
+        ppnaInformation: JSON.stringify(ppnaInformation),
+      });
       return {
         statusCode: HttpStatus.OK,
-        communityAnnualPPNAMean,
+        ppnaInformation,
       };
     } catch (e) {
       console.log(`ERROR(GEEController - getCommunityAnnualPPNAMean: ${e}`);
@@ -416,13 +415,17 @@ export class GEEController {
     @Param('year') year: number
   ) {
     try {
-      const communityAnnualPPNA = await this.geeService.getCommunityAnnualPPNA(
+      console.log(`Executing getCommunityAnnualPPNA for year ${year}...`);
+      const ppnaInformation = await this.geeService.getCommunityAnnualPPNA(
         communityOrder,
         +year
       );
+      console.log('getCommunityAnnualPPNA results: ', {
+        ppnaInformation: JSON.stringify(ppnaInformation),
+      });
       return {
         statusCode: HttpStatus.OK,
-        communityAnnualPPNA,
+        ppnaInformation,
       };
     } catch (e) {
       console.log(`ERROR(GEEController - getCommunityAnnualPPNA: ${e}`);
@@ -431,22 +434,308 @@ export class GEEController {
   }
 
   @Get('/community/:order/ppna/historical')
-  async getCommunityPPNAHistorical(@Param('order') communityOrder: string) {
+  async getCommunityHistoricalPPNA(@Param('order') communityOrder: string) {
     try {
-      const communityHistoricalPPNA =
-        await this.geeService.getCommunityHistoricalPPNA(communityOrder);
+      console.log('Executing getCommunityHistoricalPPNA...');
+      const ppnaInformation = await this.geeService.getCommunityHistoricalPPNA(
+        communityOrder
+      );
+      console.log('getZoneAnnualPPNA results: ', {
+        ppnaInformation: JSON.stringify(ppnaInformation),
+      });
       return {
         statusCode: HttpStatus.OK,
-        communityHistoricalPPNA,
+        ppnaInformation,
       };
     } catch (e) {
       console.log(`ERROR(GEEController - getCommunityHistoricalPPNA: ${e}`);
       return 'ERROR';
     }
   }
+  // #endregion PPNA
+  // #region APAR
+  @Get('/community/:order/apar/annual/mean')
+  async getCommunityAnnualAPARMean(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityAnnualAPARMean...');
+      const aparInformation = await this.geeService.getCommunityAnnualAPARMean(
+        communityOrder
+      );
+      console.log('getCommunityAnnualAPARMean results: ', {
+        aparInformation: JSON.stringify(aparInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        aparInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualAPARMean: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/apar/annual/:year')
+  async getCommunityAnnualAPAR(
+    @Param('order') communityOrder: string,
+    @Param('year') year: number
+  ) {
+    try {
+      console.log(`Executing getCommunityAnnualAPAR for year ${year}...`);
+      const aparInformation = await this.geeService.getCommunityAnnualAPAR(
+        communityOrder,
+        +year
+      );
+      console.log('getCommunityAnnualAPAR results: ', {
+        aparInformation: JSON.stringify(aparInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        aparInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualAPAR: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/apar/historical')
+  async getCommunityHistoricalAPAR(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityHistoricalAPAR...');
+      const aparInformation = await this.geeService.getCommunityHistoricalAPAR(
+        communityOrder
+      );
+      console.log('getCommunityHistoricalAPAR results: ', {
+        aparInformation: JSON.stringify(aparInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        aparInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityHistoricalAPAR: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion APAR
+
+  // #region ET
+  @Get('/community/:order/et/annual/mean')
+  async getCommunityAnnualETMean(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityAnnualETMean...');
+      const etInformation = await this.geeService.getCommunityAnnualETMean(
+        communityOrder
+      );
+      console.log('getCommunityAnnualETMean results: ', {
+        etInformation: JSON.stringify(etInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        etInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualETMean: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/et/annual/:year')
+  async getCommunityAnnualET(
+    @Param('order') communityOrder: string,
+    @Param('year') year: number
+  ) {
+    try {
+      console.log(`Executing getCommunityAnnualET for year ${year}...`);
+      const etInformation = await this.geeService.getCommunityAnnualET(
+        communityOrder,
+        +year
+      );
+      console.log('getCommunityAnnualET results: ', {
+        etInformation: JSON.stringify(etInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        etInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualET: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/et/historical')
+  async getCommunityHistoricalET(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityETHistorical...');
+      const etInformation = await this.geeService.getCommunityHistoricalET(
+        communityOrder
+      );
+      console.log('getCommunityHistoricalET results: ', {
+        etInformation: JSON.stringify(etInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        etInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityHistoricalET: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion ET
+
+  // #region RH
+  @Get('/community/:order/rh/annual/mean')
+  async getCommunityAnnualRHMean(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityAnnualRHMean...');
+      const rhInformation = await this.geeService.getCommunityAnnualRHMean(
+        communityOrder
+      );
+      console.log('getCommunityAnnualRHMean results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualRHMean: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/rh/annual/:year')
+  async getCommunityAnnualRH(
+    @Param('order') communityOrder: string,
+    @Param('year') year: number
+  ) {
+    try {
+      console.log(`Executing getCommunityAnnualRH for year ${year}...`);
+      const rhInformation = await this.geeService.getCommunityAnnualRH(
+        communityOrder,
+        +year
+      );
+      console.log('getCommunityAnnualRH results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualRH: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/rh/historical')
+  async getCommunityHistoricalRH(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityHistoricalRH...');
+      const rhInformation = await this.geeService.getCommunityHistoricalRH(
+        communityOrder
+      );
+      console.log('getCommunityRHHistorical results: ', {
+        rhInformation: JSON.stringify(rhInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityHistoricalRH: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion RH
+
+  // #region RHProp
+  @Get('/community/:order/rhProp/annual/mean')
+  async getCommunityAnnualRHPropMean(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityAnnualRHPropMean...');
+      const rhPropInformation =
+        await this.geeService.getCommunityAnnualRHPropMean(communityOrder);
+      console.log('getCommunityAnnualRHPropMean results: ', {
+        rhPropInformation: JSON.stringify(rhPropInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhPropInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualRHPropMean: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/rhProp/annual/:year')
+  async getCommunityAnnualRHProp(
+    @Param('order') communityOrder: string,
+    @Param('year') year: number
+  ) {
+    try {
+      console.log(`Executing getCommunityAnnualRHProp for year ${year}...`);
+      const rhPropInformation = await this.geeService.getCommunityAnnualRHProp(
+        communityOrder,
+        +year
+      );
+      console.log('getCommunityAnnualRHProp results: ', {
+        rhPropInformation: JSON.stringify(rhPropInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhPropInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAnnualRHProp: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('/community/:order/rhProp/historical')
+  async getCommunityHistoricalRHProp(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityHistoricalRHProp...');
+      const rhPropInformation =
+        await this.geeService.getCommunityHistoricalRHProp(communityOrder);
+      console.log('getCommunityRHPropHistorical results: ', {
+        rhPropInformation: JSON.stringify(rhPropInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        rhPropInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityHistoricalRHProp: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion RHProp
+
+  //#region IOSE
+  @Get('/community/:order/iose/historical')
+  async getCommunityHistoricalIOSE(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityHistoricalIOSE...');
+      const ioseInformation = await this.geeService.getCommunityHistoricalIOSE(
+        communityOrder
+      );
+      console.log('getCommunityHistoricalIOSE results: ', {
+        ioseInformation: JSON.stringify(ioseInformation),
+      });
+      return { statusCode: HttpStatus.OK, ioseInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityHistoricalIOSE: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion IOSE
   // #endregion
 
-  // #region Police Sectionals
+  // #region Police Sectionals & Basins
   @Get('police-sectionals')
   async getPoliceSectionals() {
     try {

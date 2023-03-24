@@ -82,7 +82,7 @@ export class GEEService {
    *  Return Zone Information
    *   Coordinates (if zone is a point)
    *   Area and Perimeter (if zone is a polygon)
-   *   Comunities ( list of communities with the % of zone iincluded in every community)
+   *   Communities ( list of communities with the % of zone included in every community)
    *   Productivity Info
    *    - historical means
    *    - monthly means (for current year and previous)
@@ -109,31 +109,11 @@ export class GEEService {
   }
 
   // #region PPNA - Community
-  async getCommunityPPNAInformation(communityOrder) {
-    try {
-      const community = await this.createCommunityImage(communityOrder);
-      const currentYear = dayjs().year();
-      return {
-        historicalAveragePPNA: {
-          values: await this.getAnnualPPNAMean(community),
-        },
-        ppna: [
-          {
-            year: currentYear,
-            values: await this.getZonePPNAByYear(community, currentYear),
-          },
-        ],
-      };
-    } catch (e) {
-      console.log('EEE', e);
-    }
-  }
-
   async getCommunityAnnualPPNA(communityOrder, year) {
     const community = await this.createCommunityImage(communityOrder);
     return {
       year: year,
-      values: await this.getZonePPNAByYear(community, year, true),
+      values: await this.getPPNAByYear(community, year, true),
     };
   }
 
@@ -151,12 +131,108 @@ export class GEEService {
 
   // #endregion PPNA - Community
 
+  // #region APAR - Community
+  async getCommunityAnnualAPAR(communityOrder, year) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      year: year,
+      values: await this.getAPARByYear(community, year, true),
+    };
+  }
+
+  async getCommunityAnnualAPARMean(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      values: await this.getAnnualAPARMean(community, true),
+    };
+  }
+
+  async getCommunityHistoricalAPAR(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getHistoricalAPAR(community, true);
+  }
+
+  // #endregion APAR - Community
+
+  // #region ET - Community
+  async getCommunityAnnualET(communityOrder, year) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      year: year,
+      values: await this.getETByYear(community, year, true),
+    };
+  }
+
+  async getCommunityAnnualETMean(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      values: await this.getAnnualETMean(community, true),
+    };
+  }
+
+  async getCommunityHistoricalET(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getHistoricalET(community, true);
+  }
+  // #endregion ET - Community
+
+  // #region RH- Community
+  async getCommunityAnnualRH(communityOrder, year) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      year: year,
+      values: await this.getRHByYear(community, year, true),
+    };
+  }
+
+  async getCommunityAnnualRHMean(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      values: await this.getAnnualRHMean(community, true),
+    };
+  }
+
+  async getCommunityHistoricalRH(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getHistoricalRH(community, true);
+  }
+  // #endregion RH- Community
+
+  // #region RHProp - Community
+  async getCommunityAnnualRHProp(communityOrder, year) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      year: year,
+      values: await this.getRHPropByYear(community, year, true),
+    };
+  }
+
+  async getCommunityAnnualRHPropMean(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return {
+      values: await this.getAnnualRHPropMean(community, true),
+    };
+  }
+
+  async getCommunityHistoricalRHProp(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getHistoricalRHProp(community, true);
+  }
+  // #endregion RHProp
+
+  // #region IOSE - Community
+  async getCommunityHistoricalIOSE(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getHistoricalIOSE(community, true);
+  }
+  // #endregion IOSE -Community
+
   // #region PPNA
   async getZoneAnnualPPNA(zoneInfo, year) {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
-      values: await this.getZonePPNAByYear(zone, year),
+      values: await this.getPPNAByYear(zone, year),
     };
   }
 
@@ -179,7 +255,7 @@ export class GEEService {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
-      values: await this.getZoneAPARByYear(zone, year),
+      values: await this.getAPARByYear(zone, year),
     };
   }
 
@@ -202,7 +278,7 @@ export class GEEService {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
-      values: await this.getZoneETByYear(zone, year),
+      values: await this.getETByYear(zone, year),
     };
   }
 
@@ -224,7 +300,7 @@ export class GEEService {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
-      values: await this.getZoneRHByYear(zone, year),
+      values: await this.getRHByYear(zone, year),
     };
   }
 
@@ -246,7 +322,7 @@ export class GEEService {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
-      values: await this.getZoneRHPropByYear(zone, year),
+      values: await this.getRHPropByYear(zone, year),
     };
   }
 
@@ -521,6 +597,7 @@ export class GEEService {
   //#region Private Methods
   private async getMapInfo(mapType: MapType): Promise<MapModel> {
     const mapInfo = new Maps().getMapInfo(mapType);
+    console.log({ mapInfo });
     const communityInfo = mapInfo.communityOrder
       ? await this.getCommunityInfo(mapInfo.communityOrder)
       : undefined;
@@ -553,11 +630,14 @@ export class GEEService {
         };
       })
       .catch((e) => {
+        console.log(`GEEService  - getCommunityInfo error ${e}`);
         return undefined;
       });
   }
 
   private createZone(type, coordinates) {
+    // fs.writeFileSync('coordinates.json', JSON.stringify(coordinates));
+    // console.log({ coordinates });
     switch (type) {
       case 'marker': {
         return new ee.Geometry.Point(coordinates);
@@ -612,7 +692,7 @@ export class GEEService {
   }
 
   // #region PPNA
-  private async getZonePPNAByYear(zone, year, applyMask = false) {
+  private async getPPNAByYear(zone, year, applyMask = false) {
     if (year <= 2000) {
       return [];
     }
@@ -716,7 +796,7 @@ export class GEEService {
   //#endregion PPNA
 
   // #region APAR
-  private async getZoneAPARByYear(zone, year, applyMask = false) {
+  private async getAPARByYear(zone, year, applyMask = false) {
     if (year <= 2000) {
       return [];
     }
@@ -811,7 +891,7 @@ export class GEEService {
   //#endregion APAR
 
   //#region ET
-  private async getZoneETByYear(zone, year, applyMask = false) {
+  private async getETByYear(zone, year, applyMask = false) {
     // TODO: Move to config (First year ET data --> 2001)
     if (year <= 2000) {
       return [];
@@ -853,7 +933,7 @@ export class GEEService {
       const nextYearValues = await nextYearData.getInfo();
       nextYearResult = this.getMonthly(nextYearValues, 'et');
     } catch (e) {
-      console.log('getZoneETByYear error', e);
+      console.log('getETByYear error', e);
       nextYearResult = [];
     }
 
@@ -891,7 +971,7 @@ export class GEEService {
       renamedValues[newKey] = value;
     }
     const result = this.getMonthly(renamedValues, 'et');
-    return [...result.slice(12), ...result.slice(0, 12)];
+    return [...result.slice(23), ...result.slice(0, 23)];
   }
 
   private async getHistoricalET(zone, applyMask = false) {
@@ -925,7 +1005,7 @@ export class GEEService {
   // #endregion ET
 
   // #region RH
-  private async getZoneRHByYear(zone, year, applyMask = false) {
+  private async getRHByYear(zone, year, applyMask = false) {
     if (year < 2003) {
       return [];
     }
@@ -962,7 +1042,7 @@ export class GEEService {
         const nextYearValues = await nextYearData.getInfo();
         nextYearResult = this.getMonthly(nextYearValues, 'rh');
       } catch {
-        console.log(`Error getZoneRHByYear -> getZoneData ${year + 1}`);
+        console.log(`Error getRHByYear -> getZoneData ${year + 1}`);
         nextYearResult = [];
       }
     }
@@ -1035,7 +1115,7 @@ export class GEEService {
   // #endregion RH
 
   // #region RHProp
-  private async getZoneRHPropByYear(zone, year, applyMask = false) {
+  private async getRHPropByYear(zone, year, applyMask = false) {
     if (year < 2003) {
       return [];
     }
@@ -1067,24 +1147,21 @@ export class GEEService {
       dayjs().month() !== 0 ||
       dayjs().date() > 20
     ) {
-      const nextYearData = await this.getZoneData(
-        zone,
-        MAP_PATH.RHProp,
-        `b${year + 1}.*`,
-        applyMask
-      );
-      const nextYearValues = await nextYearData.getInfo();
-      nextYearResult = this.getMonthly(nextYearValues, 'rhProp');
+      try {
+        const nextYearData = await this.getZoneData(
+          zone,
+          MAP_PATH.RHProp,
+          `b${year + 1}.*`,
+          applyMask
+        );
+        const nextYearValues = await nextYearData.getInfo();
+        nextYearResult = this.getMonthly(nextYearValues, 'rhProp');
+      } catch {
+        console.log(`Error getRHPropByYear -> getZoneData ${year + 1}`);
+        nextYearResult = [];
+      }
     }
 
-    //add Predictions
-    // if (year === dayjs().year() - 1) {
-    //   const predictionValues = this.getZonePrediction(zone);
-    //   const currentMonth = dayjs().month();
-    //   for (let i = 0; i <= 2; i++) {
-    //     nextYearResult.push(predictionValues[currentMonth + i]);
-    //   }
-    // }
     return this.getProductiveValues(yearResult, nextYearResult);
   }
 
@@ -1152,46 +1229,30 @@ export class GEEService {
       iose = iose.updateMask(zone);
     }
 
-    const data = iose.reduceRegion({
+    const dataMean = iose.reduceRegion({
       reducer: ee.Reducer.mean(),
       geometry: geometry,
       scale: 231.65635826395828,
       maxPixels: 1e12,
     });
-    const dataMin = iose.reduceRegion({
-      reducer: ee.Reducer.min(),
+
+    const dataStdDev = iose.reduceRegion({
+      reducer: ee.Reducer.stdDev(),
       geometry: geometry,
       scale: 231.65635826395828,
       maxPixels: 1e12,
     });
-    const dataMax = iose.reduceRegion({
-      reducer: ee.Reducer.max(),
-      geometry: geometry,
-      scale: 231.65635826395828,
-      maxPixels: 1e12,
-    });
-    const dataMedian = iose.reduceRegion({
-      reducer: ee.Reducer.median(),
-      geometry: geometry,
-      scale: 231.65635826395828,
-      maxPixels: 1e12,
-    });
-    const test = await iose.getInfo();
-    const values = await data.getInfo();
-    const valuesMin = await dataMin.getInfo();
-    const valuesMax = await dataMax.getInfo();
-    const valuesMedian = await dataMedian.getInfo();
-    console.log({ test });
-    console.log({ values });
-    console.log({ valuesMin });
-    console.log({ valuesMax });
-    console.log({ valuesMedian });
+
+    const valuesMean = await dataMean.getInfo();
+    const valuesStdDev = await dataStdDev.getInfo();
+
     const result = [];
-    for (const [key, value] of Object.entries(values)) {
+    for (const [key, value] of Object.entries(valuesMean)) {
       const [, year] = key.split('b');
       result.push({
         year: year,
-        iose: (value as number).toFixed(2),
+        iose: (value as number).toFixed(3),
+        stdDev: (valuesStdDev[key] as number).toFixed(4),
       });
     }
     return result.sort((a, b) => {
