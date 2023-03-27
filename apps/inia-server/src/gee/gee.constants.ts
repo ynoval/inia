@@ -55,11 +55,11 @@ export const MAP_PATH = {
   SP: 'projects/gee-inia/assets/Seccionales_Policiales',
 
   // Cuencas
-  C_I: 'users/fgallego/Cuencas/Cuencas_G1_utm21S', // TODO: Move and rename
-  C_II: 'users/fgallego/Cuencas/Cuencas_G2_utm21S', // TODO: Move and rename
-  C_III: 'users/fgallego/Cuencas/Cuencas_G3_utm21S', // TODO: Move and rename
-  C_IV: 'users/fgallego/Cuencas/Cuencas_G4_utm21S', // TODO: Move and rename
-  C_V: 'users/fgallego/Cuencas/Cuencas_G5_utm21S', // TODO: Move and rename
+  C_I: 'projects/pastizalesrou/assets/cuencas/Cuencas_G1',
+  C_II: 'projects/pastizalesrou/assets/cuencas/Cuencas_G2',
+  C_III: 'projects/pastizalesrou/assets/cuencas/Cuencas_G3',
+  C_IV: 'projects/pastizalesrou/assets/cuencas/Cuencas_G4',
+  C_V: 'projects/pastizalesrou/assets/cuencas/Cuencas_G5',
 
   //OLD
   // ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
