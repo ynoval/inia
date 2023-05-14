@@ -29,6 +29,25 @@ export class GEEService {
     return fc.features;
   }
 
+  async getPadron(padronId: string) {
+    const mapInfo = new Maps().getMapInfo('PADRONES');
+    const fc = await mapInfo.getResource();
+    // Filter the features based on a specific property value
+    const filteredFc = fc.filter(ee.Filter.eq('PADRON', parseInt(padronId)));
+    // Get the first feature in the filtered FeatureCollection
+    const feature = filteredFc.first();
+    return feature.getInfo();
+  }
+
+  async validatePadron(padronId: string) {
+    const mapInfo = new Maps().getMapInfo('PADRONES');
+    const fc = await mapInfo.getResource();
+    // Filter the features based on a specific property value
+    const filteredFc = fc.filter(ee.Filter.eq('PADRON', parseInt(padronId)));
+    const isValid = filteredFc.size().gt(0);
+    return isValid.getInfo();
+  }
+
   /**
    * Return all information layers
    * PPNA, PPT, T, CPUr, ROU
@@ -343,6 +362,18 @@ export class GEEService {
   async getZoneHistoricalIOSE(zoneInfo) {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return this.getHistoricalIOSE(zone);
+  }
+  // #endregion IOSE
+
+  // #region Mapbiomas
+  async getZoneHistoricalMapbiomas(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getHistoricalMapbiomas(zone);
+  }
+
+  async getZoneAnnualMapbiomas(zoneInfo, year) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getAnnualMapbiomas(zone, year);
   }
   // #endregion IOSE
 
@@ -673,9 +704,11 @@ export class GEEService {
         maxPixels: 1e12,
       });
     const areas = await areasInfo.getInfo();
+    console.log({ areas });
     const promises = [];
 
     areas.groups.forEach(async (info) => {
+      console.log({ info });
       const communityOrder = this.getCommunityOrder(info.group);
       promises.push(this.getCommunityInfo(communityOrder));
     });
@@ -1260,6 +1293,94 @@ export class GEEService {
     });
   }
   // #endregion IOSE
+
+  // #region Mapbiomas
+  private async getHistoricalMapbiomas(zone, applyMask = false) {
+    let mapbiomas = ee.Image(MAP_PATH['Mapbiomas']);
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    if (applyMask) {
+      mapbiomas.unmask();
+      mapbiomas = mapbiomas.updateMask(zone);
+    }
+    const results = {};
+    const yearResults = [];
+    for (let year = 1985; year <= 2021; year++) {
+      const bandName = 'classification_' + year;
+      const image = mapbiomas.select(bandName);
+
+      // Calculate area of every cover in the current year
+      const areaByClass = ee.Image.pixelArea()
+        .addBands(image)
+        .reduceRegion({
+          reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class',
+          }),
+          geometry: geometry,
+          scale: 30,
+          maxPixels: 1e13,
+        });
+
+      yearResults.push(ee.List(areaByClass.get('groups')));
+    }
+
+    yearResults.forEach((geeYearResult) => {
+      const resultList = geeYearResult.getInfo();
+      resultList.forEach((result) => {
+        const classId = result['class'];
+        const area = result['sum'];
+
+        if (results[classId]) {
+          results[classId].push(area);
+        } else {
+          results[classId] = [area];
+        }
+      });
+    });
+
+    console.log('results: ', { results });
+    return results;
+  }
+
+  private async getAnnualMapbiomas(zone, year, applyMask = false) {
+    let mapbiomas = ee.Image(MAP_PATH['Mapbiomas']);
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    if (applyMask) {
+      mapbiomas.unmask();
+      mapbiomas = mapbiomas.updateMask(zone);
+    }
+
+    const bandName = 'classification_' + year;
+    console.log(`bandName: ${bandName}`);
+    const image = mapbiomas.select(bandName);
+    // Calculate area of every cover in the current year
+    const areaByClass = ee.Image.pixelArea()
+      .addBands(image)
+      .reduceRegion({
+        reducer: ee.Reducer.sum().group({
+          groupField: 1,
+          groupName: 'class',
+        }),
+        geometry: geometry,
+        scale: 30,
+        maxPixels: 1e13,
+      });
+
+    const yearResults = ee.List(areaByClass.get('groups')).getInfo();
+    console.log('yearResults: ', { yearResults });
+    const results = {};
+
+    yearResults.forEach((result) => {
+      const classId = result['class'];
+      const area = result['sum'];
+      results[classId] = area;
+    });
+    console.log('results: ', { results });
+    return results;
+  }
+
+  // #endregion Mapbiomas
+
   // #region General (Used for all indicators)
   private async getCurrentYear(zone, mapPath, bandsName, applyMask = false) {
     const currentMonth = dayjs().month();

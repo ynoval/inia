@@ -6,13 +6,17 @@
   },
   "editor.guides.bracketPairs": "active",
   "cSpell.words": [
+    "Actualización",
     "Anual",
     "apar",
+    "automatizado",
     "Basalto",
+    "Biomas",
     "Comunidades",
     "Contorno",
     "Cuencas",
     "Densos",
+    "desde",
     "earthengine",
     "endregion",
     "Forrajero",
@@ -22,8 +26,10 @@
     "Historico",
     "inia",
     "iose",
+    "mapbiomas",
     "multiband",
     "nestjs",
+    "padron",
     "Pastizal",
     "Pastizales",
     "pastizalesrou",
@@ -35,6 +41,7 @@
     "Seccionales",
     "subcommunities",
     "Tair",
-    "Temperatura"
+    "Temperatura",
+    "utilizando"
   ]
 }

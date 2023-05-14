@@ -32,7 +32,8 @@ export type MapType =
   | 'C_II'
   | 'C_III'
   | 'C_IV'
-  | 'C_V';
+  | 'C_V'
+  | 'PADRONES';
 
 export type CommunityInfo = {
   id: string;
@@ -118,6 +119,12 @@ export class Maps {
         visualizationParams: VISUALIZATION_PARAMS['IOSE'],
         layerLabel: 'IOSE',
         layerDescription: 'IOSE',
+      },
+      Mapbiomas: {
+        getResource: () => new ee.Image(MAP_PATH['Mapbiomas']),
+        visualizationParams: VISUALIZATION_PARAMS['Mapbiomas'],
+        layerLabel: 'Mapbiomas',
+        layerDescription: 'Mapbiomas',
       },
       CPUr: {
         getResource: () => new ee.Image(MAP_PATH['CPUr']),
@@ -226,6 +233,12 @@ export class Maps {
         visualizationParams: VISUALIZATION_PARAMS['C_V'],
         layerLabel: 'C_5',
         layerDescription: 'Cuencas grado 5 del Uruguay',
+      },
+      PADRONES: {
+        getResource: () => new ee.FeatureCollection(MAP_PATH['PADRONES']),
+        visualizationParams: VISUALIZATION_PARAMS['PADRONES'],
+        layerLabel: 'Padrones',
+        layerDescription: 'Padrones del Uruguay',
       },
     };
   }

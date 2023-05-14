@@ -36,6 +36,11 @@ export const MAP_PATH = {
     'projects/pastizalesrou/assets/rhProp/rhProp_PromedioAnual',
 
   IOSE: 'projects/pastizalesrou/assets/iose/iose_Historica',
+
+  //TODO: Move to pastizalesROU assets and filter to ROU?
+  Mapbiomas:
+    'projects/MapBiomas_Pampa/public/collection2/mapbiomas_pampa_collection2_integration_v1',
+
   CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
   ROU: 'users/bagnato/LimiteOficial-ROU',
 
@@ -60,6 +65,10 @@ export const MAP_PATH = {
   C_III: 'projects/pastizalesrou/assets/cuencas/Cuencas_G3',
   C_IV: 'projects/pastizalesrou/assets/cuencas/Cuencas_G4',
   C_V: 'projects/pastizalesrou/assets/cuencas/Cuencas_G5',
+
+  //Padrones
+  // TODO: FIX when all padrones are available
+  PADRONES: 'projects/pastizalesrou/assets/padrones/padrones_colonia',
 
   //OLD
   // ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
@@ -142,6 +151,11 @@ export const VISUALIZATION_PARAMS = {
     max: 1,
     bands: ['b2021'], // Jul 2021 -- Jun 2022
   },
+  Mapbiomas: {
+    min: 0,
+    max: 1,
+    bands: ['classification_2021'],
+  },
   CPUr: {
     opacity: 1,
     bands: ['b1'],
@@ -214,6 +228,11 @@ export const VISUALIZATION_PARAMS = {
     palette: ['ffffff', 'eeeeee'],
   },
   C_V: {
+    opacity: 0.1,
+    max: 126,
+    palette: ['ffffff', 'eeeeee'],
+  },
+  PADRONES: {
     opacity: 0.1,
     max: 126,
     palette: ['ffffff', 'eeeeee'],

@@ -385,6 +385,43 @@ export class GEEController {
   }
   // #endregion IOSE
 
+  // #region mapbiomas
+  @Post('/zone/mapbiomas/historical')
+  async getZoneHistoricalMapbiomas(@Body() zoneInfo: ZoneInfo) {
+    try {
+      console.log('Executing getZoneHistoricalMapbiomas...');
+      const mapbiomasInformation =
+        await this.geeService.getZoneHistoricalMapbiomas(zoneInfo);
+      console.log('getZoneHistoricalMapbiomas results: ', {
+        mapbiomasInformation: JSON.stringify(mapbiomasInformation),
+      });
+      return { statusCode: HttpStatus.OK, mapbiomasInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getZoneHistoricalMapbiomas: ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Post('/zone/mapbiomas/annual/:year')
+  async getZoneAnnualMapbiomas(
+    @Param('year') year: number,
+    @Body() zoneInfo: ZoneInfo
+  ) {
+    try {
+      console.log('Executing getZoneAnnualMapbiomas...');
+      const mapbiomasInformation = await this.geeService.getZoneAnnualMapbiomas(
+        zoneInfo,
+        year
+      );
+      console.log('getZoneAnnualMapbiomas results: ', {
+        mapbiomasInformation: JSON.stringify(mapbiomasInformation),
+      });
+      return { statusCode: HttpStatus.OK, mapbiomasInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getZoneAnnualMapbiomas: ${e}`);
+      return 'ERROR';
+    }
+  }
   // #endregion
 
   // #region COMMUNITY
@@ -735,7 +772,7 @@ export class GEEController {
   // #endregion IOSE
   // #endregion
 
-  // #region Police Sectionals & Basins
+  // #region Police Sectionals
   @Get('police-sectionals')
   async getPoliceSectionals() {
     try {
@@ -749,6 +786,9 @@ export class GEEController {
       return 'ERROR';
     }
   }
+  //#endregion
+
+  // #region Basins
   @Get('basins/:grade')
   async getBasins(@Param('grade') grade: 'I' | 'II' | 'III' | 'IV' | 'V') {
     try {
@@ -763,6 +803,8 @@ export class GEEController {
     }
   }
   // #endregion
+
+  // #region Padrones
 
   // #region update GEE data
   @Post('update-ppna')
@@ -810,5 +852,35 @@ export class GEEController {
       };
     }
   }
+  // #endregion
+
+  @Get('padrones/:id')
+  async getPadron(@Param('id') padronId: string) {
+    try {
+      const padron = await this.geeService.getPadron(padronId);
+      return {
+        statusCode: HttpStatus.OK,
+        padron,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getPadron(${padronId}): ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  @Get('padrones/validate/:id')
+  async validatePadron(@Param('id') padronId: string) {
+    try {
+      const isValid = await this.geeService.validatePadron(padronId);
+      return {
+        statusCode: HttpStatus.OK,
+        isValid,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - validatePadron(${padronId}): ${e}`);
+      return 'ERROR';
+    }
+  }
+
   // #endregion
 }
