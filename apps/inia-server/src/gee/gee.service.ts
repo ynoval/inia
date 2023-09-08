@@ -734,7 +734,14 @@ export class GEEService {
       return [];
     }
     if (year === currentYear) {
-      return this.getCurrentYear(zone, MAP_PATH.PPNA, `b${year}.*`, applyMask);
+      return this.getCurrentYear(
+        zone,
+        MAP_PATH.PPNA,
+        `b${year}.*`,
+        'ppna',
+        16,
+        applyMask
+      );
     }
 
     const yearData = await this.getZoneData(
@@ -838,7 +845,14 @@ export class GEEService {
       return [];
     }
     if (year === currentYear) {
-      return this.getCurrentYear(zone, MAP_PATH.APAR, `b${year}.*`, applyMask);
+      return this.getCurrentYear(
+        zone,
+        MAP_PATH.APAR,
+        `b${year}.*`,
+        'apar',
+        16,
+        applyMask
+      );
     }
 
     const yearData = await this.getZoneData(
@@ -938,7 +952,14 @@ export class GEEService {
     const bandsName = `b${year}.*`;
 
     if (year === currentYear) {
-      return this.getCurrentYear(zone, MAP_PATH.ET, bandsName, applyMask);
+      return this.getCurrentYear(
+        zone,
+        MAP_PATH.ET,
+        bandsName,
+        'et',
+        8,
+        applyMask
+      );
     }
 
     const yearData = await this.getZoneData(
@@ -1047,7 +1068,14 @@ export class GEEService {
       return [];
     }
     if (year === currentYear) {
-      return this.getCurrentYear(zone, MAP_PATH.RH, `b${year}.*`, applyMask);
+      return this.getCurrentYear(
+        zone,
+        MAP_PATH.RH,
+        `b${year}.*`,
+        'rh',
+        16,
+        applyMask
+      );
     }
 
     const yearData = await this.getZoneData(
@@ -1161,6 +1189,8 @@ export class GEEService {
         zone,
         MAP_PATH.RHProp,
         `b${year}.*`,
+        'rhProp',
+        16,
         applyMask
       );
     }
@@ -1382,39 +1412,55 @@ export class GEEService {
   // #endregion Mapbiomas
 
   // #region General (Used for all indicators)
-  private async getCurrentYear(zone, mapPath, bandsName, applyMask = false) {
-    const currentMonth = dayjs().month();
-    const currentDay = dayjs().date();
-    const nextYearResult = [];
-    let currentYearResult = [];
+  private async getCurrentYear(
+    zone,
+    mapPath,
+    bandsName,
+    indicator,
+    days = 16,
+    applyMask = false
+  ) {
+    try {
+      const currentMonth = dayjs().month();
+      const currentDay = dayjs().date();
+      const nextYearResult = [];
+      let currentYearResult = [];
 
-    if (currentMonth > 0 || currentDay > 20) {
-      const currentYearData = await this.getZoneData(
-        zone,
-        mapPath,
-        bandsName,
-        applyMask
-      );
-      const currentYearValues = await currentYearData.getInfo();
-      currentYearResult = this.getMonthly(currentYearValues, 'et');
+      if (currentMonth > 0 || currentDay > 20) {
+        const currentYearData = await this.getZoneData(
+          zone,
+          mapPath,
+          bandsName,
+          applyMask
+        );
+        const currentYearValues = await currentYearData.getInfo();
+        currentYearResult = this.getMonthly(currentYearValues, indicator);
+      }
+
+      return this.getProductiveValues(currentYearResult, nextYearResult, days);
+    } catch (e) {
+      console.log(`getCurrentYear error: ${e}`);
+      return [];
     }
-
-    return this.getProductiveValues(currentYearResult, nextYearResult);
   }
 
   private getZoneData(zone, mapPath, bandsName, applyMask = false) {
-    const geometry = !applyMask ? zone : zone.geometry(500);
-    let image = ee.Image(mapPath).select([bandsName]);
-    if (applyMask) {
-      image.unmask();
-      image = image.updateMask(zone);
+    try {
+      const geometry = !applyMask ? zone : zone.geometry(500);
+      let image = ee.Image(mapPath).select([bandsName]);
+      if (applyMask) {
+        image.unmask();
+        image = image.updateMask(zone);
+      }
+      return image.reduceRegion({
+        reducer: ee.Reducer.mean(),
+        geometry: geometry,
+        scale: FILTER_PARAMS.SCALE,
+        maxPixels: FILTER_PARAMS.MAX_PIXELS,
+      });
+    } catch (e) {
+      console.log(`getZoneData error: ${e}`);
     }
-    return image.reduceRegion({
-      reducer: ee.Reducer.mean(),
-      geometry: geometry,
-      scale: FILTER_PARAMS.SCALE,
-      maxPixels: FILTER_PARAMS.MAX_PIXELS,
-    });
   }
 
   private getMonthly(data, valueName: string) {

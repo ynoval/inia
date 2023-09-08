@@ -22,13 +22,13 @@ export const MAP_PATH = {
 
   PPT: 'users/bagnato/PronosticoForrajero/PPT2003-2020', // TODO: FIX and MOVE
   T: 'users/bagnato/PronosticoForrajero/Tair16_2001-2020', // TODO: FIX and MOVE
-  RH: 'projects/pastizalesrou/assets/rh/rh-16_Historica', // TODO: FIX remove Historica prefix when current year data is available
+  RH: 'projects/pastizalesrou/assets/rh/rh-16',
   RH_HISTORIC: 'projects/pastizalesrou/assets/rh/rh-16_Historica',
   RH_HISTORIC_AVERAGE:
     'projects/pastizalesrou/assets/rh/rh-16_PromedioHistorico',
   RH_HISTORIC_AVERAGE_BY_YEAR:
     'projects/pastizalesrou/assets/rh/rh_PromedioAnual',
-  RHProp: 'projects/pastizalesrou/assets/rhProp/rhProp-16_Historica',
+  RHProp: 'projects/pastizalesrou/assets/rhProp/rhProp-16',
   RHProp_HISTORIC: 'projects/pastizalesrou/assets/rhProp/rhProp-16_Historica',
   RHProp_HISTORIC_AVERAGE:
     'projects/pastizalesrou/assets/rhProp/rhProp-16_PromedioHistorico',
@@ -57,7 +57,7 @@ export const MAP_PATH = {
   PdE: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesDelEste', // TODO: Move and Rename
 
   //Seccionales policiales
-  SP: 'projects/gee-inia/assets/Seccionales_Policiales',
+  SP: 'projects/pastizalesrou/assets/Seccionales_Policiales',
 
   // Cuencas
   C_I: 'projects/pastizalesrou/assets/cuencas/Cuencas_G1',
@@ -69,19 +69,6 @@ export const MAP_PATH = {
   //Padrones
   // TODO: FIX when all padrones are available
   PADRONES: 'projects/pastizalesrou/assets/padrones/padrones_colonia',
-
-  //OLD
-  // ET: 'users/bagnato/PronosticoForrajero/ET/ET2003-2020',
-  // PPT: 'users/bagnato/PronosticoForrajero/GPM16_2001-2020',
-  //  PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_2001-2020_1', //OLD
-  // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica',
-  // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d16',
-  // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d113',
-  // PPNA: 'users/bagnato/PronosticoForrajero/PPNA-16_SerieHistorica_2022-d257',
-  //PPNA_CURRENT_YEAR: 'users/bagnato/PronosticoForrajero/PPNA-16_2022_doy1',
-  // CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay',
-  // CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
-  // ROU: 'users/bagnato/LimiteOficial-ROU',
 };
 
 export const VISUALIZATION_PARAMS = {
