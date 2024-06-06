@@ -41,6 +41,9 @@ export const MAP_PATH = {
   Mapbiomas:
     'projects/MapBiomas_Pampa/public/collection2/mapbiomas_pampa_collection2_integration_v1',
 
+  SOIL: 'projects/pastizalesrou/assets/Soil/RUSLE_agricola_17-19',
+  EFT: 'projects/pastizalesrou/assets/EFT/TFE_17-19',
+  AHPPN: 'projects/pastizalesrou/assets/AHPPN/AHPPN_17-19_sin0',
   CPUr: 'users/bagnato/PronosticoForrajero/ComunidadesDePastizal/PastizalesUruguay_moda',
   ROU: 'users/bagnato/LimiteOficial-ROU',
 
@@ -68,7 +71,7 @@ export const MAP_PATH = {
 
   //Padrones
   // TODO: FIX when all padrones are available
-  PADRONES: 'projects/pastizalesrou/assets/padrones/padrones_colonia',
+  PADRONES: 'projects/pastizalesrou/assets/padrones/padrones_ajustado',
 };
 
 export const VISUALIZATION_PARAMS = {

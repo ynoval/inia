@@ -29,23 +29,42 @@ export class GEEService {
     return fc.features;
   }
 
-  async getPadron(padronId: string) {
+  async getPadron(padronId: string, department: string) {
     const mapInfo = new Maps().getMapInfo('PADRONES');
     const fc = await mapInfo.getResource();
-    // Filter the features based on a specific property value
-    const filteredFc = fc.filter(ee.Filter.eq('PADRON', parseInt(padronId)));
+    // Filter the features based on a PADRON AND DEPARTMENT
+    const filter = ee.Filter.and(
+      ee.Filter.eq('CODDEPTO', department),
+      ee.Filter.eq('PADRON', parseInt(padronId))
+    )
+    const filteredFc = fc.filter(filter);
+
     // Get the first feature in the filtered FeatureCollection
     const feature = filteredFc.first();
     return feature.getInfo();
   }
 
-  async validatePadron(padronId: string) {
+  async validatePadron(padronId: string, department: string) {
     const mapInfo = new Maps().getMapInfo('PADRONES');
     const fc = await mapInfo.getResource();
-    // Filter the features based on a specific property value
-    const filteredFc = fc.filter(ee.Filter.eq('PADRON', parseInt(padronId)));
+    // Filter the features based on a PADRON AND DEPARTMENT
+    const filter = ee.Filter.and(
+      ee.Filter.eq('CODDEPTO', department),
+      ee.Filter.eq('PADRON', Number.parseInt(padronId))
+    )
+    const filteredFc = fc.filter(filter);
     const isValid = filteredFc.size().gt(0);
-    return isValid.getInfo();
+    const result = isValid.getInfo();
+    console.log("valid padron: ", result)
+    return result;
+  }
+
+  async getDepartments() {
+    const mapInfo = new Maps().getMapInfo('PADRONES');
+    const fc = await mapInfo.getResource();
+    const departaments = fc.aggregate_array('NOMDPTO').distinct();
+    departaments.sort();
+    return departaments.getInfo();
   }
 
   /**
@@ -246,6 +265,28 @@ export class GEEService {
   }
   // #endregion IOSE -Community
 
+  // #region SOIL - Community
+  async getCommunitySOIL(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getSOIL(community, true);
+  }
+  // #endregion SOIL - Community
+
+  // #region EFT - Community
+  async getCommunityEFT(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getEFT(community, true);
+  }
+  // #endregion EFT - Community
+
+  // #region AHPPN - Community
+  async getCommunityAHPPN(communityOrder) {
+    const community = await this.createCommunityImage(communityOrder);
+    return this.getAHPPN(community, true);
+  }
+  // #endregion SOIL - Community
+
+
   // #region PPNA
   async getZoneAnnualPPNA(zoneInfo, year) {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
@@ -375,7 +416,28 @@ export class GEEService {
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return this.getAnnualMapbiomas(zone, year);
   }
-  // #endregion IOSE
+  // #endregion Mapbiomas
+
+  // #region SOIL
+  async getZoneSOIL(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getSOIL(zone);
+  }
+  // endregion SOIL
+
+  // #region EFT
+  async getZoneEFT(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getEFT(zone);
+  }
+  // endregion EFT
+
+    // #region AHPPN
+  async getZoneAHPPN(zoneInfo) {
+    const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
+    return this.getAHPPN(zone);
+  }
+  // endregion AHPPN
 
   // #region UPDATE
 
@@ -1411,6 +1473,123 @@ export class GEEService {
 
   // #endregion Mapbiomas
 
+  // #region SOIL
+  private async getSOIL(zone, applyMask = false){
+    let soil = ee.Image(MAP_PATH['SOIL']);
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    if (applyMask) {
+      soil.unmask();
+      soil = soil.updateMask(zone);
+    }
+
+    const results = soil.reduceRegion({
+      reducer: ee.Reducer.mean()
+        .combine({
+          reducer2: ee.Reducer.minMax(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.median(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.percentile([25, 75]),
+          sharedInputs: true
+        }),
+      geometry: geometry,
+      scale: 231.65635826395825
+    });
+
+    const data = results.getInfo();
+    return {
+      "max": data.b1_max,
+      "mean" : data.b1_mean,
+      "median": data.b1_median,
+      "min": data.b1_min,
+      "p25" : data.b1_p25,
+      "p75" : data.b1_p75
+    }
+  }
+  // #endregion SOIL
+
+  // #region EFT
+  private async getEFT(zone, applyMask = false){
+    let eft = ee.Image(MAP_PATH['EFT']);
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    if (applyMask) {
+      eft.unmask();
+      eft = eft.updateMask(zone);
+    }
+
+    const results = eft.reduceRegion({
+      reducer: ee.Reducer.mean()
+        .combine({
+          reducer2: ee.Reducer.minMax(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.median(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.percentile([25, 75]),
+          sharedInputs: true
+        }),
+      geometry: geometry,
+      scale: 231.65635826395825
+    });
+
+   const data = results.getInfo();
+    return {
+      "max": data.b1_max,
+      "mean" : data.b1_mean,
+      "median": data.b1_median,
+      "min": data.b1_min,
+      "p25" : data.b1_p25,
+      "p75" : data.b1_p75
+    }
+  }
+  // #endregion EFT
+
+  // #region AHPPN
+  private async getAHPPN(zone, applyMask = false){
+    let ahppn = ee.Image(MAP_PATH['AHPPN']);
+    const geometry = !applyMask ? zone : zone.geometry(500);
+    if (applyMask) {
+      ahppn.unmask();
+      ahppn = ahppn.updateMask(zone);
+    }
+
+    const results = ahppn.reduceRegion({
+      reducer: ee.Reducer.mean()
+        .combine({
+          reducer2: ee.Reducer.minMax(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.median(),
+          sharedInputs: true
+        })
+        .combine({
+          reducer2: ee.Reducer.percentile([25, 75]),
+          sharedInputs: true
+        }),
+      geometry: geometry,
+      scale: 231.65635826395825
+    });
+
+    const data = results.getInfo();
+    return {
+      "max": data.b1_max,
+      "mean" : data.b1_mean,
+      "median": data.b1_median,
+      "min": data.b1_min,
+      "p25" : data.b1_p25,
+      "p75" : data.b1_p75
+    }
+  }
+  // #endregion AHPPN
+
   // #region General (Used for all indicators)
   private async getCurrentYear(
     zone,
@@ -1536,82 +1715,5 @@ export class GEEService {
 
   //#endregion Private Methods
 
-  // #region DELETE
-  /* DELETE - OLD Methods
- // private getZonePPNAData(zone, year, applyMask = false) {
-  //   const geometry = !applyMask ? zone : zone.geometry(500);
-  //   const mapPath = MAP_PATH.PPNA;
 
-  //   let ppna = ee.Image(mapPath).select([`b${year}.*`]);
-  //   if (applyMask) {
-  //     ppna.unmask();
-  //     ppna = ppna.updateMask(zone);
-  //   }
-  //   return ppna.reduceRegion({
-  //     reducer: ee.Reducer.mean(),
-  //     geometry: geometry,
-  //     scale: FILTER_PARAMS.SCALE,
-  //     maxPixels: FILTER_PARAMS.MAX_PIXELS,
-  //   });
-  // }
-
-  // private getPPNAMonthly(data) {
-  //   console.log({ data });
-  //   const results = [];
-  //   const sortData = Object.entries(data).sort((a, b) => {
-  //     const aKey = a[0].split('-')[1];
-  //     const bKey = b[0].split('-')[1];
-  //     return +aKey < +bKey ? -1 : 1;
-  //   });
-  //   for (const [key, value] of sortData) {
-  //     const [, day] = key.split('-');
-  //     results.push({
-  //       // day: dayjs('2021-01-01')
-  //       //   .add(+day - 1, 'day')
-  //       //   .format('MMM DD'),
-  //       day: +day,
-  //       ppna: (+value).toFixed(2),
-  //     });
-  //   }
-  //   console.log({ results });
-  //   return results;
-  // }
-
-  // private getPPNAProductiveValues(yearResult, nextYearResult) {
-  //   console.log({ yearResult }, { nextYearResult });
-  //   const result = [...yearResult.slice(12), ...nextYearResult.slice(0, 12)];
-  //   return result;
-  // }
-
-  // private async getCurrentYearPPNA(zone, applyMask = false) {
-  //   const currentMonth = dayjs().month();
-  //   const currentDay = dayjs().date();
-  //   const nextYearResult = [];
-  //   let currentYearResult = [];
-
-  //   if (currentMonth > 0 || currentDay > 20) {
-  //     const currentYearData = await this.getZonePPNAData(
-  //       zone,
-  //       dayjs().year(),
-  //       applyMask
-  //     );
-  //     console;
-  //     const currentYearValues = await currentYearData.getInfo();
-  //     currentYearResult = this.getPPNAMonthly(currentYearValues);
-  //   }
-
-  //   // Add prediction  values (3 months)
-  //   // const predictionValues = this.getZonePrediction(zone);
-
-  //   // for (let i = 0; i <= 2; i++) {
-  //   //   if (currentMonth + i <= 11) {
-  //   //     currentYearResult.push(predictionValues[currentMonth + i]);
-  //   //   } else {
-  //   //     nextYearResult.push(predictionValues[currentMonth + i - 12]);
-  //   //   }
-  //   // }
-  //   return this.getPPNAProductiveValues(currentYearResult, nextYearResult);
-  // }
-  */
-  // #endregion
 }

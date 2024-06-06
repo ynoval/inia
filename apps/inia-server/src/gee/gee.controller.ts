@@ -424,6 +424,63 @@ export class GEEController {
   }
   // #endregion
 
+  //#region SOIL
+  @Post('/zone/soil/')
+  async getZoneSOIL(@Body() zoneInfo: ZoneInfo) {
+    try {
+      console.log('Executing getZoneSOIL...');
+      const soilInformation = await this.geeService.getZoneSOIL(
+        zoneInfo
+      );
+      console.log('getZoneSOIL results: ', {
+        soilInformation: JSON.stringify(soilInformation),
+      });
+      return { statusCode: HttpStatus.OK, soilInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getZoneSOIL: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion SOIL
+
+  //#region EFT
+  @Post('/zone/eft/')
+  async getZoneEFT(@Body() zoneInfo: ZoneInfo) {
+    try {
+      console.log('Executing getZoneEFT...');
+      const eftInformation = await this.geeService.getZoneEFT(
+        zoneInfo
+      );
+      console.log('getZoneEFT results: ', {
+        eftInformation: JSON.stringify(eftInformation),
+      });
+      return { statusCode: HttpStatus.OK, eftInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getZoneEFT: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion EFT
+
+  //#region AHPPN
+  @Post('/zone/ahppn/')
+  async getZoneAHPPN(@Body() zoneInfo: ZoneInfo) {
+    try {
+      console.log('Executing getZoneAHPPN...');
+      const ahppnInformation = await this.geeService.getZoneAHPPN(
+        zoneInfo
+      );
+      console.log('getZoneAHPPN results: ', {
+        ahppnInformation: JSON.stringify(ahppnInformation),
+      });
+      return { statusCode: HttpStatus.OK, ahppnInformation };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getZoneAHPPN: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion AHPPN
+
   // #region COMMUNITY
   // #region PPNA
   @Get('/community/:order/ppna/annual/mean')
@@ -770,6 +827,74 @@ export class GEEController {
     }
   }
   // #endregion IOSE
+
+  // #region SOIL
+  @Get('/community/:order/soil/')
+  async getCommunitySOIL(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunitySOIL...');
+      const soilInformation = await this.geeService.getCommunitySOIL(
+        communityOrder
+      );
+      console.log('getCommunitySOIL results: ', {
+        soilInformation: JSON.stringify(soilInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        soilInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunitySOIL: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion SOIL
+
+  // #region EFT
+  @Get('/community/:order/eft/')
+  async getCommunityEFT(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunitySOIL...');
+      const eftInformation = await this.geeService.getCommunityEFT(
+        communityOrder
+      );
+      console.log('getCommunityEFT results: ', {
+        eftInformation: JSON.stringify(eftInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        eftInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityEFT: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion EFT
+
+  // #region AHPPN
+  @Get('/community/:order/ahppn/')
+  async getCommunityAHPPN(@Param('order') communityOrder: string) {
+    try {
+      console.log('Executing getCommunityAHPPN...');
+      const ahppnInformation = await this.geeService.getCommunityAHPPN(
+        communityOrder
+      );
+      console.log('getCommunityAHPPN results: ', {
+        ahppnInformation: JSON.stringify(ahppnInformation),
+      });
+      return {
+        statusCode: HttpStatus.OK,
+        ahppnInformation,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getCommunityAHPPN: ${e}`);
+      return 'ERROR';
+    }
+  }
+  // #endregion AHPPN
+
+
   // #endregion
 
   // #region Police Sectionals
@@ -854,30 +979,43 @@ export class GEEController {
   }
   // #endregion
 
-  @Get('padrones/:id')
-  async getPadron(@Param('id') padronId: string) {
+  @Get('padrones/:id/:department')
+  async getPadron(@Param('id') padronId: string, @Param('department') department: string) {
     try {
-      const padron = await this.geeService.getPadron(padronId);
+      const padron = await this.geeService.getPadron(padronId, department);
       return {
         statusCode: HttpStatus.OK,
         padron,
       };
     } catch (e) {
-      console.log(`ERROR(GEEController - getPadron(${padronId}): ${e}`);
+      console.log(`ERROR(GEEController - getPadron(${padronId}, ${department}): ${e}`);
       return 'ERROR';
     }
   }
 
-  @Get('padrones/validate/:id')
-  async validatePadron(@Param('id') padronId: string) {
+  @Get('padrones/validate/:id/:department')
+  async validatePadron(@Param('id') padronId: string, @Param('department') department: string) {
     try {
-      const isValid = await this.geeService.validatePadron(padronId);
+      const isValid = await this.geeService.validatePadron(padronId, department);
       return {
         statusCode: HttpStatus.OK,
         isValid,
       };
     } catch (e) {
       console.log(`ERROR(GEEController - validatePadron(${padronId}): ${e}`);
+      return 'ERROR';
+    }
+  }
+
+  async getDepartments(){
+    try {
+      const departments = await this.geeService.getDepartments();
+      return {
+        statusCode: HttpStatus.OK,
+        departments,
+      };
+    } catch (e) {
+      console.log(`ERROR(GEEController - getDepartments(): ${e}`);
       return 'ERROR';
     }
   }
