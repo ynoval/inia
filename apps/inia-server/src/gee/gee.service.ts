@@ -1514,39 +1514,40 @@ export class GEEService {
 
   // #region EFT
   private async getEFT(zone, applyMask = false){
-    let eft = ee.Image(MAP_PATH['EFT']);
+    let eftImage = ee.Image(MAP_PATH['EFT']);
     const geometry = !applyMask ? zone : zone.geometry(500);
     if (applyMask) {
-      eft.unmask();
-      eft = eft.updateMask(zone);
+      eftImage.unmask();
+      eftImage = eftImage.updateMask(zone);
     }
 
-    const results = eft.reduceRegion({
-      reducer: ee.Reducer.mean()
-        .combine({
-          reducer2: ee.Reducer.minMax(),
-          sharedInputs: true
-        })
-        .combine({
-          reducer2: ee.Reducer.median(),
-          sharedInputs: true
-        })
-        .combine({
-          reducer2: ee.Reducer.percentile([25, 75]),
-          sharedInputs: true
-        }),
+    const histogram = eftImage.reduceRegion({
+      reducer: ee.Reducer.frequencyHistogram(),
       geometry: geometry,
-      scale: 231.65635826395825
+      scale: 231.65635826395825,
+      maxPixels: 1e9
     });
 
-   const data = results.getInfo();
+    const histogramObj = ee.Dictionary(histogram.get('b1'));
+
+    const pixelArea = 231.65635826395825 * 231.65635826395825;
+    const areas = histogramObj.map(function(key, count) {
+      return ee.Number(count).multiply(pixelArea);
+    });
+
+    const totalArea = ee.Number(areas.values().reduce(ee.Reducer.sum()));
+
+
+    //const totalArea = zone.area()
+
+    const result = ee.List(areas.values()).map(function(area) {
+      const prop = ee.Number(area).divide(totalArea);
+      return prop.multiply(prop.log().multiply(-1));
+    }).reduce(ee.Reducer.sum());
+
+   const data = result.getInfo();
     return {
-      "max": data.b1_max,
-      "mean" : data.b1_mean,
-      "median": data.b1_median,
-      "min": data.b1_min,
-      "p25" : data.b1_p25,
-      "p75" : data.b1_p75
+      eft: data
     }
   }
   // #endregion EFT
@@ -1671,7 +1672,6 @@ export class GEEService {
 
   private async createCommunityImage(communityOrder: string) {
     let path = '';
-
     switch (communityOrder) {
       case 'I': {
         path = MAP_PATH['PrB'];
