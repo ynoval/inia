@@ -312,6 +312,7 @@ export class GEEService {
 
   // #region APAR
   async getZoneAnnualAPAR(zoneInfo, year) {
+    console.log("getZoneAnnualAPAR --> ", year)
     const zone = this.createZone(zoneInfo.type, zoneInfo.coordinates);
     return {
       year: year,
@@ -827,8 +828,13 @@ export class GEEService {
         `b${year + 1}.*`,
         applyMask
       );
-      const nextYearValues = await nextYearData.getInfo();
-      nextYearResult = this.getMonthly(nextYearValues, 'ppna');
+      try {
+        const nextYearValues = await nextYearData.getInfo();
+        nextYearResult = this.getMonthly(nextYearValues, 'ppna');
+      } catch (e) {
+        console.log('getPPNAByYear error', e);
+        nextYearResult = [];
+      }
     }
 
     //add Predictions
@@ -938,8 +944,13 @@ export class GEEService {
         `b${year + 1}.*`,
         applyMask
       );
-      const nextYearValues = await nextYearData.getInfo();
-      nextYearResult = this.getMonthly(nextYearValues, 'apar');
+      try {
+        const nextYearValues = await nextYearData.getInfo();
+        nextYearResult = this.getMonthly(nextYearValues, 'apar');
+      } catch (e) {
+        console.log('getAPARByYear error', e);
+        nextYearResult = [];
+      }
     }
     return this.getProductiveValues(yearResult, nextYearResult);
   }
@@ -1606,7 +1617,7 @@ export class GEEService {
       const nextYearResult = [];
       let currentYearResult = [];
 
-      if (currentMonth > 0 || currentDay > 20) {
+      if (currentMonth > 1 || currentDay > 20) {
         const currentYearData = await this.getZoneData(
           zone,
           mapPath,
@@ -1640,6 +1651,7 @@ export class GEEService {
       });
     } catch (e) {
       console.log(`getZoneData error: ${e}`);
+      return[]
     }
   }
 
